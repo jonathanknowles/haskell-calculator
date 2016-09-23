@@ -22,7 +22,7 @@ import qualified Data.Text.IO as T
 
 import Prelude hiding (Exp, exp)
 
-{- Typed expression trees. -}
+-- Typed expression trees.
 
 data Exp a where
     Nat :: !Natural -> Exp Nat
@@ -66,7 +66,7 @@ instance Eq TExp where (TExp a) == (TExp b) = toUExp a == toUExp b
 deriving instance Show (Exp a)
 instance Show TExp where show (TExp e) = show e
 
--- Untyped expression trees
+-- Untyped expression trees.
 
 data UExp
     = UNat !Natural
@@ -77,7 +77,7 @@ data UExp
     | UDiv !UExp !UExp
     deriving (Eq, Show)
 
--- Converts expression trees from typed to untyped
+-- Converts expression trees from typed to untyped.
 
 toUExp :: Exp a -> UExp
 toUExp = \case
@@ -89,7 +89,7 @@ toUExp = \case
     Mul a b -> UMul (toUExp a) (toUExp b)
     Div a b -> UDiv (toUExp a) (toUExp b)
 
--- Converts expression trees from untyped to typed
+-- Converts expression trees from untyped to typed.
 
 toTExp :: UExp -> TExp
 toTExp = \case
@@ -145,7 +145,7 @@ toTExp = \case
             UMul a b -> MulR $ Bra $ mul a b
             UDiv a b -> MulR $ Bra $ div a b
 
--- Generators of arbitrary expressions
+-- Generators of arbitrary expressions.
 
 instance Arbitrary UExp where
     arbitrary = sized tree
@@ -174,7 +174,7 @@ instance Arbitrary UExp where
 instance Arbitrary TExp where
     arbitrary = toTExp <$> arbitrary
 
--- Evaluation
+-- Evaluation.
 
 evalT :: TExp -> Rational
 evalT (TExp e) = eval e
@@ -189,7 +189,7 @@ eval = \case
     Mul a b -> eval a * eval b
     Div a b -> eval a / eval b
 
--- Pretty printing
+-- Pretty printing.
 
 prettyU :: UExp -> Text
 prettyU = prettyT . toTExp
@@ -207,7 +207,7 @@ pretty = \case
     Mul a b -> pretty a <> textMul <> pretty b
     Div a b -> pretty a <> textDiv <> pretty b
 
--- Fixed tokens
+-- Fixed tokens.
 
 charNeg = '-'; textNeg = T.singleton charNeg
 charAdd = '+'; textAdd = T.singleton charAdd
@@ -217,7 +217,7 @@ charDiv = '/'; textDiv = T.singleton charDiv
 charBra = '('; textBra = T.singleton charBra
 charKet = ')'; textKet = T.singleton charKet
 
--- Parsing
+-- Parsing.
 
 uexp :: Parser UExp
 uexp = choice [x <* endOfInput | x <- [add, mul, neg, nat]]
@@ -235,6 +235,8 @@ chainL l o r = apply <$> l <*> o <*> r >>= rest
     where
         rest l = (apply l <$> o <*> r >>= rest) <|> return l
         apply l o r = l `o` r
+
+-- Testing.
 
 propPrintParseIdentity :: UExp -> Bool
 propPrintParseIdentity e =
