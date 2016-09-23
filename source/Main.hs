@@ -179,6 +179,9 @@ instance Arbitrary TExp where
 evalT :: TExp -> Rational
 evalT (TExp e) = eval e
 
+evalU :: UExp -> Rational
+evalU = evalT . toTExp
+
 eval :: Exp a -> Rational
 eval = \case
     Nat a -> fromIntegral a
