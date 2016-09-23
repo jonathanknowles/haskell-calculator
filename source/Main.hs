@@ -12,6 +12,7 @@ module Main where
 import Control.Applicative ((<$>), (<*>), (<|>))
 import Data.Attoparsec.Text
 import Data.Monoid ((<>))
+import Data.Ratio (numerator, denominator)
 import Data.Text (Text)
 import Numeric.Natural (Natural)
 import Test.QuickCheck
@@ -209,6 +210,12 @@ pretty = \case
     Sub a b -> pretty a <> textSub <> pretty b
     Mul a b -> pretty a <> textMul <> pretty b
     Div a b -> pretty a <> textDiv <> pretty b
+
+prettyR :: Rational -> Text
+prettyR r = if denominator r == 1 then n else n <> "/" <> d
+    where
+        n = T.pack $ show $   numerator r
+        d = T.pack $ show $ denominator r
 
 -- Fixed tokens.
 
