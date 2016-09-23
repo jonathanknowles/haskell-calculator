@@ -228,15 +228,16 @@ charMul = '*'; textMul = T.singleton charMul
 charDiv = '/'; textDiv = T.singleton charDiv
 charBra = '('; textBra = T.singleton charBra
 charKet = ')'; textKet = T.singleton charKet
+charEqu = '='; textEqu = T.singleton charEqu
 
 -- Parsing.
 
 uexp :: Parser UExp
-uexp = choice [x <* endOfInput | x <- [add, mul, neg, nat]]
+uexp = choice [x <* endOfInput | x <- [bra, add, mul, neg, nat]]
     where
         nat = UNat <$> decimal
-        neg = UNeg <$> choice [char charNeg *> x | x <- [nat, bra]]
-        bra = choice [char charBra *> x <* char charKet | x <- [add, mul, neg]]
+        neg = UNeg <$> choice [char charNeg *> x | x <- [bra, nat]]
+        bra = choice [char charBra *> x <* char charKet | x <- [bra, add, mul, neg, nat]]
         add = chainL (choice [mul, nat, neg, bra]) addOp (choice [mul, nat, bra])
         mul = chainL (choice [nat, bra]) mulOp (choice [nat, bra])
         addOp = choice [char charAdd *> pure UAdd, char charSub *> pure USub]
