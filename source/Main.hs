@@ -17,9 +17,6 @@ import Numeric.Natural (Natural)
 import Test.QuickCheck
 import Test.QuickCheck.Arbitrary
 
-import System.IO (hSetBuffering, stdout, BufferMode (NoBuffering))
-
-import Data.Foldable
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
 
