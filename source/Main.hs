@@ -214,7 +214,7 @@ pretty = \case
     Div a b -> pretty a <> textDiv <> pretty b
 
 prettyR :: Rational -> Text
-prettyR r = if denominator r == 1 then n else n <> "/" <> d
+prettyR r = if denominator r == 1 then n else n <> textDiv <> d
     where
         n = T.pack $ show $   numerator r
         d = T.pack $ show $ denominator r
