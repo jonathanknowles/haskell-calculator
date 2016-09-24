@@ -17,16 +17,16 @@ main = do
     T.putStrLn "Please enter arithmetic expressions to have them evaluated."
     forever $ do
         T.putStr "> "
-        T.getLine >>= T.putStrLn . calculate . stripSpaces
-
-stripSpaces :: Text -> Text
-stripSpaces = T.filter (/= ' ')
+        T.getLine >>= T.putStrLn . calculate
 
 {-| Parses the given expression, evaluates the resulting
     expression tree, and then pretty prints the result. -}
 calculate :: Text -> Text
 calculate e =
-    case parseUExp e of
+    case parseUExp $ stripSpaces e of
         Left e -> "Syntax error! Please try again."
         Right r -> prettyU r <> textEqu <> prettyR (evalU r)
+
+stripSpaces :: Text -> Text
+stripSpaces = T.filter (/= ' ')
 
