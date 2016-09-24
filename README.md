@@ -1,7 +1,11 @@
 # haskell-calculator
 A simple four-function calculator, implemented in Haskell.
 
-It includes:
+This calculator is capable of evaluating arithmetic expressions such as "<code>1+1</code>" or "<code>(1+2)*(3+4)</code>". Expressions can contain natural numbers and any of the standard arithmetic operators: addition, subtraction, multiplication, and division. Unary negation and nesting sub-expressions within parentheses are also supported. (Non-natural numbers are not supported.)
+
+Implementation
+--------------
+The implementation includes:
 * Data structures for encoding arithmetic expressions as trees (see the <code>[Exp](https://github.com/jonathanknowles/haskell-calculator/blob/master/source/library/Calculator.hs)</code> and <code>[UExp](https://github.com/jonathanknowles/haskell-calculator/blob/master/source/library/Calculator.hs)</code> types).
 * Functions for parsing arithmetic expressions from textual input (see function <code>[parseUExp](https://github.com/jonathanknowles/haskell-calculator/blob/master/source/library/Calculator.hs)</code>).
 * Functions for pretty-printing arithmetic expressions (see function <code>[pretty](https://github.com/jonathanknowles/haskell-calculator/blob/master/source/library/Calculator.hs)</code>).
