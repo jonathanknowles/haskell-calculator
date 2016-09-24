@@ -7,18 +7,14 @@
 {-# LANGUAGE OverloadedStrings         #-}
 {-# LANGUAGE StandaloneDeriving        #-}
 
-module Main where
+module Calculator where
 
 import Control.Applicative ((<$>), (<*>), (<|>))
-import Control.Monad (forever)
 import Data.Attoparsec.Text
 import Data.Monoid ((<>))
 import Data.Ratio (numerator, denominator)
 import Data.Text (Text)
 import Numeric.Natural (Natural)
-import System.IO (hSetBuffering, stdout, BufferMode (NoBuffering))
-import Test.QuickCheck
-import Test.QuickCheck.Arbitrary
 
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
@@ -148,35 +144,6 @@ toTExp = \case
             UMul a b -> MulR $ Bra $ mul a b
             UDiv a b -> MulR $ Bra $ div a b
 
--- Generators of arbitrary expressions.
-
-instance Arbitrary UExp where
-    arbitrary = sized tree
-        where
-            tree 0 = UNat <$> arbitrary
-            tree n = oneof
-                    [ UNeg <$> x
-                    , UAdd <$> x <*> x
-                    , USub <$> x <*> x
-                    , UMul <$> x <*> x
-                    , UDiv <$> x <*> x ]
-                where
-                    x = tree $ n * 3 `div` 4
-    shrink = \case
-            UNat n -> UNat <$> shrink n
-            UNeg a -> a : (UNeg <$> shrink a)
-            UAdd a b -> s UAdd a b
-            USub a b -> s USub a b
-            UMul a b -> s UMul a b
-            UDiv a b -> s UDiv a b
-        where
-            s op a b =
-                (a : ((a `op`) <$> shrink b)) <>
-                (b : ((`op` b) <$> shrink a))
-
-instance Arbitrary TExp where
-    arbitrary = toTExp <$> arbitrary
-
 -- Evaluation.
 
 evalT :: TExp -> Rational
@@ -232,8 +199,11 @@ charEqu = '='; textEqu = T.singleton charEqu
 
 -- Parsing.
 
-uexp :: Parser UExp
-uexp = choice [x <* endOfInput | x <- [bra, add, mul, neg, nat]]
+parseUExp :: Text -> Either String UExp
+parseUExp = parseOnly uExp
+
+uExp :: Parser UExp
+uExp = choice [x <* endOfInput | x <- [bra, add, mul, neg, nat]]
     where
         nat = UNat <$> decimal
         neg = UNeg <$> choice [char charNeg *> x | x <- [bra, nat]]
@@ -248,43 +218,4 @@ chainL l o r = apply <$> l <*> o <*> r >>= rest
     where
         rest l = (apply l <$> o <*> r >>= rest) <|> return l
         apply l o r = l `o` r
-
--- Testing.
-
-propPrintParseIdentity :: UExp -> Bool
-propPrintParseIdentity e =
-    case parseOnly uexp (prettyU e) of
-        Left e -> False
-        Right r -> e == r
-
-propNoDoubleOperators :: TExp -> Bool
-propNoDoubleOperators e = not $ or
-    [x `T.isInfixOf` prettyT e | x <- doubleOperators]
-
-singleOperators :: [Char]
-singleOperators = [charNeg, charAdd, charSub, charMul, charDiv]
-
-doubleOperators :: [Text]
-doubleOperators = [T.pack [x, y] | x <- singleOperators, y <- singleOperators]
-
--- Calculator command-line interface.
-
-main :: IO ()
-main = do
-    hSetBuffering stdout NoBuffering
-    putStrLn "Please enter arithmetic expressions to have them evaluated."
-    forever $ do
-        T.putStr "> "
-        T.getLine >>= T.putStrLn . calculate . stripSpaces
-
-stripSpaces :: Text -> Text
-stripSpaces = T.filter (/= ' ')
-
-{-| Parses the given expression, evaluates the resulting
-    expression tree, and then pretty prints the result. -}
-calculate :: Text -> Text
-calculate e =
-    case parseOnly uexp e of
-        Left e -> "Syntax error! Please try again."
-        Right r -> prettyU r <> textEqu <> prettyR (evalU r)
 
