@@ -5,7 +5,6 @@
 {-# LANGUAGE MultiParamTypeClasses     #-}
 {-# LANGUAGE NoMonomorphismRestriction #-}
 {-# LANGUAGE OverloadedStrings         #-}
-{-# LANGUAGE StandaloneDeriving        #-}
 
 import Calculator
 import Control.Applicative ((<$>), (<*>))
@@ -48,7 +47,7 @@ propNoDoubleOperators e = not $ or
                           , charSub
                           , charMul
                           , charDiv ]
-
+ 
 instance Arbitrary UExp where
     arbitrary = sized tree
         where

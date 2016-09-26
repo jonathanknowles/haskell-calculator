@@ -5,7 +5,7 @@
 {-# LANGUAGE MultiParamTypeClasses     #-}
 {-# LANGUAGE NoMonomorphismRestriction #-}
 {-# LANGUAGE OverloadedStrings         #-}
-{-# LANGUAGE StandaloneDeriving        #-}
+{-# LANGUAGE StandaloneDeriving        #-}   
 
 module Calculator where
 

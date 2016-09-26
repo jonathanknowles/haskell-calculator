@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-
+  
 module Main where
 
 import Calculator
