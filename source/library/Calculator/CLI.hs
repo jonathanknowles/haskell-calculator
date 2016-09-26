@@ -21,7 +21,7 @@ main = do
     T.putStrLn "Please enter arithmetic expressions to have them evaluated."
     forever $ do
         T.putStr "> "
-        T.getLine >>= T.putStrLn . calculate
+        T.putStrLn . calculate =<< T.getLine
 
 {-| Parses the given expression, evaluates the resulting
     expression tree, and then pretty prints the result. -}
