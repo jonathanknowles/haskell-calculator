@@ -39,10 +39,10 @@ data Add;                  ; instance CBra Add; instance CAddL Add;             
 data Mul;                  ; instance CBra Mul; instance CAddL Mul; instance CAddR Mul; instance CMulL Mul;
 
 data TExp = forall a . TExp (Exp a)
-data AddL = forall a . CAddL a => AddL (Exp a)
-data AddR = forall a . CAddR a => AddR (Exp a)
-data MulL = forall a . CMulL a => MulL (Exp a)
-data MulR = forall a . CMulR a => MulR (Exp a)
+data AddL = forall a . CAddL a => AddL !(Exp a)
+data AddR = forall a . CAddR a => AddR !(Exp a)
+data MulL = forall a . CMulL a => MulL !(Exp a)
+data MulR = forall a . CMulR a => MulR !(Exp a)
 
 addAny (AddL a) (AddR b) = Add a b
 subAny (AddL a) (AddR b) = Sub a b
