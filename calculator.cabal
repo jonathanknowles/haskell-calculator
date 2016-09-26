@@ -12,27 +12,28 @@ cabal-version:  >= 1.10
 
 library
     hs-source-dirs:     source/library
-    exposed-modules:    Calculator
+    exposed-modules:    Calculator.CLI,
+                        Calculator.Evaluation,
+                        Calculator.Parsing,
+                        Calculator.Printing,
+                        Calculator.Test,
+                        Calculator.Tokens,
+                        Calculator.Types
     build-depends:      attoparsec >= 0.13.0.2 && < 1,
                         base       >= 4.7      && < 5,
-                        text       >= 1.2.2.1  && < 2
+                        text       >= 1.2.2.1  && < 2,
+                        QuickCheck >= 2.8.2    && < 3
     default-language:   Haskell2010
 
 executable calculator
     hs-source-dirs:     source/executable
-    main-is:            Main.hs
-    build-depends:      base       >= 4.7     && < 5,
-                        text       >= 1.2.2.1 && < 2,
-                        calculator
+    main-is:            Calculator.hs
+    build-depends:      calculator
     default-language:   Haskell2010
 
 test-suite test
     hs-source-dirs:     source/test
-    type:               exitcode-stdio-1.0
     main-is:            Test.hs
-    build-depends:      base       >= 4.7     && < 5,
-                        QuickCheck >= 2.8.2   && < 3,
-                        text       >= 1.2.2.1 && < 2,
-                        calculator
+    build-depends:      calculator
     default-language:   Haskell2010
-
+    type:               exitcode-stdio-1.0

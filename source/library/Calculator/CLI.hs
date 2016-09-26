@@ -1,8 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
   
-module Main where
+module Calculator.CLI where
 
-import Calculator
+import Calculator.Evaluation
+import Calculator.Parsing
+import Calculator.Printing
+import Calculator.Tokens
+
 import Control.Monad (forever)
 import Data.Monoid ((<>))
 import Data.Text (Text)

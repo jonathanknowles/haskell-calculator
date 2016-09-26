@@ -4,21 +4,11 @@
 {-# LANGUAGE LambdaCase                #-}
 {-# LANGUAGE MultiParamTypeClasses     #-}
 {-# LANGUAGE NoMonomorphismRestriction #-}
-{-# LANGUAGE OverloadedStrings         #-}
 {-# LANGUAGE StandaloneDeriving        #-}   
 
-module Calculator where
+module Calculator.Types where
 
-import Control.Applicative ((<$>), (<*>), (<|>))
-import Data.Attoparsec.Text
-import Data.Monoid ((<>))
-import Data.Ratio (numerator, denominator)
-import Data.Text (Text)
 import Numeric.Natural (Natural)
-
-import qualified Data.Text as T
-import qualified Data.Text.IO as T
-
 import Prelude hiding (Exp, exp)
 
 -- Typed expression trees.
@@ -76,8 +66,7 @@ data UExp
     | UDiv !UExp !UExp
     deriving (Eq, Show)
 
--- Converts expression trees from typed to untyped.
-
+{-| Converts expression trees from typed to untyped. -}
 toUExp :: Exp a -> UExp
 toUExp = \case
     Nat a -> UNat a
@@ -88,8 +77,7 @@ toUExp = \case
     Mul a b -> UMul (toUExp a) (toUExp b)
     Div a b -> UDiv (toUExp a) (toUExp b)
 
--- Converts expression trees from untyped to typed.
-
+{-| Converts expression trees from untyped to typed. -}
 toTExp :: UExp -> TExp
 toTExp = \case
         UNat a   -> TExp $ Nat a
@@ -143,79 +131,4 @@ toTExp = \case
             USub a b -> MulR $ Bra $ sub a b
             UMul a b -> MulR $ Bra $ mul a b
             UDiv a b -> MulR $ Bra $ div a b
-
--- Evaluation.
-
-evalT :: TExp -> Rational
-evalT (TExp e) = eval e
-
-evalU :: UExp -> Rational
-evalU = evalT . toTExp
-
-eval :: Exp a -> Rational
-eval = \case
-    Nat a -> fromIntegral a
-    Neg a -> negate $ eval a
-    Bra a -> eval a
-    Add a b -> eval a + eval b
-    Sub a b -> eval a - eval b
-    Mul a b -> eval a * eval b
-    Div a b -> eval a / eval b
-
--- Pretty printing.
-
-prettyU :: UExp -> Text
-prettyU = prettyT . toTExp
-
-prettyT :: TExp -> Text
-prettyT (TExp e) = pretty e
-
-pretty :: Exp a -> Text
-pretty = \case
-    Nat a -> T.pack $ show a
-    Neg a -> textNeg <> pretty a
-    Bra a -> textBra <> pretty a <> textKet
-    Add a b -> pretty a <> textAdd <> pretty b
-    Sub a b -> pretty a <> textSub <> pretty b
-    Mul a b -> pretty a <> textMul <> pretty b
-    Div a b -> pretty a <> textDiv <> pretty b
-
-prettyR :: Rational -> Text
-prettyR r = if denominator r == 1 then n else n <> textDiv <> d
-    where
-        n = T.pack $ show $   numerator r
-        d = T.pack $ show $ denominator r
-
--- Fixed tokens.
-
-charNeg = '-'; textNeg = T.singleton charNeg
-charAdd = '+'; textAdd = T.singleton charAdd
-charSub = '-'; textSub = T.singleton charSub
-charMul = '*'; textMul = T.singleton charMul
-charDiv = '/'; textDiv = T.singleton charDiv
-charBra = '('; textBra = T.singleton charBra
-charKet = ')'; textKet = T.singleton charKet
-charEqu = '='; textEqu = T.singleton charEqu
-
--- Parsing.
-
-parseUExp :: Text -> Either String UExp
-parseUExp = parseOnly uExp
-
-uExp :: Parser UExp
-uExp = choice [x <* endOfInput | x <- [bra, add, mul, neg, nat]]
-    where
-        nat = UNat <$> decimal
-        neg = UNeg <$> choice [char charNeg *> x | x <- [bra, nat]]
-        bra = choice [char charBra *> x <* char charKet | x <- [bra, add, mul, neg, nat]]
-        add = chainL (choice [mul, nat, neg, bra]) addOp (choice [mul, nat, bra])
-        mul = chainL (choice [nat, bra]) mulOp (choice [nat, bra])
-        addOp = choice [char charAdd *> pure UAdd, char charSub *> pure USub]
-        mulOp = choice [char charMul *> pure UMul, char charDiv *> pure UDiv]
-
-chainL :: Parser b -> Parser (b -> a -> b) -> Parser a -> Parser b
-chainL l o r = apply <$> l <*> o <*> r >>= rest
-    where
-        rest l = (apply l <$> o <*> r >>= rest) <|> return l
-        apply l o r = l `o` r
 
