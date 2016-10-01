@@ -18,15 +18,26 @@ library
                         Calculator.Printing,
                         Calculator.Test,
                         Calculator.Tokens,
-                        Calculator.Types
-    build-depends:      attoparsec >= 0.13.0.2 && < 1,
-                        base       >= 4.7      && < 5,
-                        text       >= 1.2.2.1  && < 2,
-                        QuickCheck >= 2.8.2    && < 3
+                        Calculator.Types,
+                        Calculator.WebInterface
+    build-depends:      attoparsec      >= 0.13.0.1 && < 1,
+                        base            >= 4.7      && < 5,
+                        containers      >= 0.5.7.1  && < 1,
+                        text            >= 1.2.1.1  && < 2,
+                        QuickCheck      >= 2.8.1    && < 3,
+                        reflex          >= 0.5.0    && < 1,
+                        reflex-dom      >= 0.4      && < 1,
+                        safe            >= 0.3.9    && < 1
     default-language:   Haskell2010
 
 executable calculator
     hs-source-dirs:     source/executable
+    main-is:            Calculator.hs
+    build-depends:      calculator
+    default-language:   Haskell2010
+
+executable web
+    hs-source-dirs:     source/web
     main-is:            Calculator.hs
     build-depends:      calculator
     default-language:   Haskell2010
