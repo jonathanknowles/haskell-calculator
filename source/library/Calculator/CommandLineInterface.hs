@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
   
-module Calculator.CLI where
+module Calculator.CommandLineInterface where
 
 import Calculator.Evaluation
 import Calculator.Parsing

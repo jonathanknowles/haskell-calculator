@@ -10,7 +10,7 @@ The implementation includes:
 * Functions for parsing arithmetic expressions from textual input (see <code>[Calculator.Parsing](https://github.com/jonathanknowles/haskell-calculator/blob/master/source/library/Calculator/Parsing.hs)</code>)
 * Functions for pretty-printing arithmetic expressions (see <code>[Calculator.Printing](https://github.com/jonathanknowles/haskell-calculator/blob/master/source/library/Calculator/Printing.hs)</code>)
 * Functions for evaluating arithmetic expressions (see <code>[Calculator.Evaluation](https://github.com/jonathanknowles/haskell-calculator/blob/master/source/library/Calculator/Evaluation.hs)</code>)
-* A simple command-line interface (see <code>[Calculator.CLI](https://github.com/jonathanknowles/haskell-calculator/blob/master/source/library/Calculator/CLI.hs)</code>)
+* A simple command-line interface (see <code>[Calculator.CommandLineInterface](https://github.com/jonathanknowles/haskell-calculator/blob/master/source/library/Calculator/CommandLineInterface.hs)</code>)
 
 It also includes a simple demonstration of using a [GADT](https://en.wikipedia.org/wiki/Generalized_algebraic_data_type) to restrict the shape of a tree-based data structure (the <code>[Exp](https://github.com/jonathanknowles/haskell-calculator/blob/master/source/library/Calculator/Types.hs)</code> type).
 
