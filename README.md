@@ -17,6 +17,10 @@ It also includes a simple demonstration of using a [GADT](https://en.wikipedia.o
 
 Building
 --------
+For the web interface, first ensure that you have a recent version of [NodeJS](https://nodejs.org/) installed. (Versions 6.6.0 and 6.7.0 should both work.)
+
+Then run:
+
 <code>stack build</code>
 
 Running the test suite
