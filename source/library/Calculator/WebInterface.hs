@@ -56,13 +56,15 @@ verticalSpace =  el "div" $ el "p" $ text ""
 type ParseResult = Either String UExp
 
 expInput :: MonadWidget t m => m (Dynamic t ParseResult)
-expInput = do  
-        rec attrs  <- mapDyn (either (const $ "class" =: "error")
-                                     (const $ "class" =: "valid")) result
-            result <- mapDyn parseUExp $ _textInput_value n
-            n <- textInput $ def & textInputConfig_initialValue .~ "0"
-                                 & textInputConfig_attributes   .~ attrs
-        return result
+expInput = do 
+        rec c <- mapDyn resultClass r
+            r <- mapDyn parseUExp $ _textInput_value t
+            t <- textInput $ def & textInputConfig_initialValue .~ "0"
+                                 & textInputConfig_attributes   .~ c
+        return r
+    where
+        resultClass = ("class" =: ) . either (const "error")
+                                             (const "valid")
 
 evaluateParseResult :: MonadWidget t m => ParseResult -> m ()
 evaluateParseResult = elAttr "div" ("class" =: "result") . text .
