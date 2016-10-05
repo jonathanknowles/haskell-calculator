@@ -13,6 +13,9 @@ extra-deps:
   - zenc-0.1.1
 packages:
   - '.'
-  - external/reflex
-  - external/reflex-dom
-    
+  - location:
+        git: git@github.com:/jonathanknowles/reflex
+        commit: a63aba90bdea5ae5b3e1506d468613bdfedcdfa3
+  - location:
+        git: git@github.com:/jonathanknowles/reflex-dom
+        commit: fca15fd1b8a2dd34e53994553907f648091c7870
