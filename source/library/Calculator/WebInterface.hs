@@ -61,8 +61,6 @@ main = mainWidgetWithCss css $ el "div" $ do
                 (const Nothing)
                 (Just . Just)) . updated
 
-verticalSpace =  el "div" $ el "p" $ text ""
-
 expressionInput :: MonadWidget t m => m (Dynamic t (Maybe (Either String UExp)))
 expressionInput = do
         elAttr "div" ("class" =: "heading") $ text "Enter an arithmetic expression:"
