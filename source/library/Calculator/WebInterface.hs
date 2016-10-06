@@ -77,7 +77,7 @@ expressionInput = do
                                    else Just $ parseUExp x
         feedbackText =
             text . maybeEither hardSpace
-                (const "Warning: expression contains invalid syntax!")
+                (const "expression contains invalid syntax")
                 (const hardSpace)
         resultClass = ("class" =:) . maybeEither "empty"
                                           (const "error")
