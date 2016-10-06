@@ -1,12 +1,14 @@
-# haskell-calculator
+Haskell Calculator
+==================
+
 A simple four-function calculator, implemented in Haskell.
 
 This calculator is capable of evaluating arithmetic expressions such as "<code>1+1</code>" or "<code>(1+2)*(3+4)</code>". Expressions can contain natural numbers and any of the standard arithmetic operators: addition, subtraction, multiplication, and division. Unary negation and nesting sub-expressions within parentheses are also supported. (Non-natural numbers are not supported.)
 
-I'm impatient and want to use it right now!
--------------------------------------------
+Demonstration
+-------------
 
-Here's a [web-based interface](https://jonathanknowles.github.io/haskell-calculator-web/), built with [GHCJS](https://github.com/ghcjs/ghcjs) and [Reflex](https://github.com/reflex-frp/reflex-platform). 
+Here's a [web-based demonstration](https://jonathanknowles.github.io/haskell-calculator-web/) built with [GHCJS](https://github.com/ghcjs/ghcjs) and [Reflex](https://github.com/reflex-frp/reflex-platform). 
 
 Implementation
 --------------
