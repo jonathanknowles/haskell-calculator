@@ -34,13 +34,14 @@ bracketsMatch t = T.foldl f 0 t == 0
 uExp :: Parser UExp
 uExp = choice [x <* endOfInput | x <- [bra, add, mul, neg, nat]]
     where
-        nat = UNat <$> decimal
-        neg = UNeg <$> choice [char charNeg *> x | x <- [bra, nat]]
-        bra = choice [char charBra *> x <* char charKet | x <- [bra, add, mul, neg, nat]]
+        nat = UNat <$> (ss *> decimal <* ss)
+        neg = UNeg <$> (ss *> choice [char charNeg *> x | x <- [bra, nat]])
+        bra = ss *> choice [char charBra *> x <* char charKet | x <- [bra, add, mul, neg, nat]] <* ss
         add = chainL (choice [mul, nat, neg, bra]) addOp (choice [mul, nat, bra])
         mul = chainL (choice [nat, bra]) mulOp (choice [nat, bra])
         addOp = choice [char charAdd *> pure UAdd, char charSub *> pure USub]
         mulOp = choice [char charMul *> pure UMul, char charDiv *> pure UDiv]
+        ss = skipSpace
 
 chainL :: Parser b -> Parser (b -> a -> b) -> Parser a -> Parser b
 chainL l o r = apply <$> l <*> o <*> r >>= rest
