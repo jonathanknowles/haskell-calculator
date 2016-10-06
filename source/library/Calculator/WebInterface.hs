@@ -39,7 +39,7 @@ css = encodeUtf8 $ T.unlines
     , "input {border: solid 0.2em; padding: 0.2em; width: 90%}"
     , "input.valid {border-color: #444444}"
     , "input.empty {border-color: #444444}"
-    , "input.error {border-color: #ff8888}"
+    , "input.error {border-color: #ff0000}"
     , "div.result {padding-top: 1em}"
     , "div.feedback {font-weight: bolder; padding-top: 0.2em}"
     , "div.heading {padding-top: 0.8em; padding-bottom: 0.2em}"
@@ -50,7 +50,7 @@ main = mainWidgetWithCss css $ el "div" $ do
         parseResult <- expressionInput
         maybeExpression <- holdDyn Nothing $ removeInvalidExpressions parseResult
         dyn =<< mapDyn maybeEvaluateExpression maybeExpression
-        verticalSpace 
+        pure ()
     where
         maybeEvaluateExpression = maybe
             (pure ())
