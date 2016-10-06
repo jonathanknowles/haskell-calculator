@@ -3,6 +3,11 @@ A simple four-function calculator, implemented in Haskell.
 
 This calculator is capable of evaluating arithmetic expressions such as "<code>1+1</code>" or "<code>(1+2)*(3+4)</code>". Expressions can contain natural numbers and any of the standard arithmetic operators: addition, subtraction, multiplication, and division. Unary negation and nesting sub-expressions within parentheses are also supported. (Non-natural numbers are not supported.)
 
+I'm impatient and want to use it right now!
+-------------------------------------------
+
+Here's a [web-based interface](https://jonathanknowles.github.io/haskell-calculator-web/), built with [GHCJS](https://github.com/ghcjs/ghcjs) and [Reflex](https://github.com/reflex-frp/reflex-platform). 
+
 Implementation
 --------------
 The implementation includes:
@@ -13,7 +18,8 @@ The implementation includes:
 * A simple command-line interface (see <code>[Calculator.CommandLineInterface](https://github.com/jonathanknowles/haskell-calculator/blob/master/source/library/Calculator/CommandLineInterface.hs)</code>)
 * A simple web interface (see <code>[Calculator.WebInterface](https://github.com/jonathanknowles/haskell-calculator/blob/master/source/library/Calculator/WebInterface.hs)</code>)
 
-It also includes a simple demonstration of using a [GADT](https://en.wikipedia.org/wiki/Generalized_algebraic_data_type) to restrict the shape of a tree-based data structure (the <code>[Exp](https://github.com/jonathanknowles/haskell-calculator/blob/master/source/library/Calculator/Types.hs)</code> type).
+The implementation also includes:
+* A simple demonstration of using a [GADT](https://en.wikipedia.org/wiki/Generalized_algebraic_data_type) to restrict the shape of a tree-based data structure (the <code>[Exp](https://github.com/jonathanknowles/haskell-calculator/blob/master/source/library/Calculator/Types.hs)</code> type).
 
 Building
 --------
