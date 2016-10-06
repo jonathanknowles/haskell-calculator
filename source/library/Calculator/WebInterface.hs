@@ -65,7 +65,7 @@ expressionInput :: MonadWidget t m => m (Dynamic t (Maybe (Either String UExp)))
 expressionInput = do
         elAttr "div" ("class" =: "heading") $ text "Enter an arithmetic expression:"
         rec t <- el "div" $ textInput $ def & textInputConfig_initialValue .~ T.empty
-                                           & textInputConfig_attributes   .~ c
+                                            & textInputConfig_attributes   .~ c
             r <- mapDyn maybeParse $ _textInput_value t
             c <- mapDyn resultClass r
             elAttr "div" ("class" =: "feedback") $ dyn =<< mapDyn feedbackText r
