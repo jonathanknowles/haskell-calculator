@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns              #-}
 {-# LANGUAGE NoMonomorphismRestriction #-}
 {-# LANGUAGE OverloadedStrings         #-}
 
@@ -11,8 +12,24 @@ import Data.Text (Text)
 
 import Prelude hiding (Exp, exp)
 
-parseUExp :: Text -> Either String UExp
-parseUExp = parseOnly uExp
+import qualified Data.Text as T
+
+errorBrackets = "expression contains unmatched brackets"
+errorSyntax   = "expression contains syntax error"
+
+parseUExp :: Text -> Either Text UExp
+parseUExp e =
+    if not (bracketsMatch e)
+        then Left errorBrackets
+        else either (const $ Left errorSyntax) Right (parseOnly uExp e)
+
+bracketsMatch :: Text -> Bool
+bracketsMatch t = T.foldl f 0 t == 0
+    where
+        f !a !c | a < 0     = a
+                | c == '('  = a + 1
+                | c == ')'  = a - 1
+                | otherwise = a
 
 uExp :: Parser UExp
 uExp = choice [x <* endOfInput | x <- [bra, add, mul, neg, nat]]

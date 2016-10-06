@@ -61,7 +61,7 @@ main = mainWidgetWithCss css $ el "div" $ do
                 (const Nothing)
                 (Just . Just)) . updated
 
-expressionInput :: MonadWidget t m => m (Dynamic t (Maybe (Either String UExp)))
+expressionInput :: MonadWidget t m => m (Dynamic t (Maybe (Either Text UExp)))
 expressionInput = do
         elAttr "div" ("class" =: "heading") $ text "Enter an arithmetic expression:"
         rec t <- el "div" $ textInput $ def & textInputConfig_initialValue .~ T.empty
@@ -74,9 +74,7 @@ expressionInput = do
         maybeParse x = if T.null x then Nothing
                                    else Just $ parseUExp x
         feedbackText =
-            text . maybeEither hardSpace
-                (const "expression contains invalid syntax")
-                (const hardSpace)
+            text . maybeEither hardSpace id (const hardSpace)
         resultClass = ("class" =:) . maybeEither "empty"
                                           (const "error")
                                           (const "valid")
