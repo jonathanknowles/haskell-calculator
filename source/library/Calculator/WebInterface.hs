@@ -19,14 +19,15 @@ import Data.Monoid ((<>))
 import Data.Text (Text)
 
 import Reflex
+import Reflex.Class (fmapMaybe)
 import Reflex.Dom
 
 import qualified Data.Text as T
 
 css = encodeUtf8 $ T.unlines
-    [ "* {font: 16pt sans-serif}"
-    , "body {background-color: #aaaaaa}"
-    , "table {border: solid 0.2em; text-align: center; padding: 0.2em; float: center}" 
+    [ "* {font: 15pt sans-serif}"
+    , "body {background-color: #aaaaaa; padding: 1em; margin: 0em}"
+    , "table {border: solid 0.2em; text-align: center; padding: 0.2em}" 
     , "td {text-align: center; vertical-align: center}"         
     , "tr {padding: 0em; border: 0em; margin: 0em}"
     , "table.add {border-color: #ff0000; background-color: #ff8888}"
@@ -37,39 +38,90 @@ css = encodeUtf8 $ T.unlines
     , "table.neg {border-color: #008800; background-color: #88ff88}"
     , "input {border: solid 0.2em; padding: 0.2em; width: 90%}"
     , "input.valid {border-color: #444444}"
+    , "input.empty {border-color: #444444}"
     , "input.error {border-color: #ff8888}"
-    , "div.result {border: solid 0.2em #444444; background-color: #ffffff; padding: 0.2em; width: 90%}"
+    , "div.result {padding-top: 1em}"
+    , "div.feedback {font-weight: bolder; padding-top: 0.2em}"
+    , "div.heading {padding-top: 0.8em; padding-bottom: 0.2em}"
+    , "div.value {border: solid 0.2em #444444; background-color: #ffffff; padding: 0.2em; width: 90%}"
     ]
 
 main = mainWidgetWithCss css $ el "div" $ do
-    z <- expInput
-    verticalSpace
-    dyn =<< mapDyn evaluateParseResult z
-    verticalSpace
-    dyn =<< mapDyn renderParseResult z
-    verticalSpace
+        parseResult <- expressionInput
+        maybeExpression <- holdDyn Nothing $ removeInvalidExpressions parseResult
+        dyn =<< mapDyn maybeEvaluateExpression maybeExpression
+        verticalSpace 
+    where
+        maybeEvaluateExpression = maybe
+            (pure ())
+            evaluateExpression
+        removeInvalidExpressions = fmapMaybe
+            (maybeEither
+                (Just Nothing)
+                (const Nothing)
+                (Just . Just)) . updated
 
 verticalSpace =  el "div" $ el "p" $ text ""
 
-type ParseResult = Either String UExp
-
-expInput :: MonadWidget t m => m (Dynamic t ParseResult)
-expInput = do 
-        rec c <- mapDyn resultClass r
-            r <- mapDyn parseUExp $ _textInput_value t
-            t <- textInput $ def & textInputConfig_initialValue .~ "0"
-                                 & textInputConfig_attributes   .~ c
+expressionInput :: MonadWidget t m => m (Dynamic t (Maybe (Either String UExp)))
+expressionInput = do
+        elAttr "div" ("class" =: "heading") $ text "Enter an arithmetic expression:"
+        rec t <- el "div" $ textInput $ def & textInputConfig_initialValue .~ T.empty
+                                           & textInputConfig_attributes   .~ c
+            r <- mapDyn maybeParse $ _textInput_value t
+            c <- mapDyn resultClass r
+            elAttr "div" ("class" =: "feedback") $ dyn =<< mapDyn feedbackText r
         return r
     where
-        resultClass = ("class" =: ) . either (const "error")
-                                             (const "valid")
+        maybeParse x = if T.null x then Nothing
+                                   else Just $ parseUExp x
+        feedbackText =
+            text . maybeEither hardSpace
+                (const "Warning: expression contains invalid syntax!")
+                (const hardSpace)
+        resultClass = ("class" =:) . maybeEither "empty"
+                                          (const "error")
+                                          (const "valid")
 
-evaluateParseResult :: MonadWidget t m => ParseResult -> m ()
-evaluateParseResult = elAttr "div" ("class" =: "result") . text .
-    either
-        (const "Please enter a valid expression.")
-        (prettyR . evalU)
+maybeEither :: c -> (a -> c) -> (b -> c) -> Maybe (Either a b) -> c
+maybeEither n l r = \case
+    Nothing        -> n
+    Just (Left  x) -> l x
+    Just (Right x) -> r x
 
+maybeEither' :: Maybe (Either a b) -> Maybe b
+maybeEither' = maybeEither Nothing (const Nothing) Just
+
+evaluateExpression :: MonadWidget t m => UExp -> m ()
+evaluateExpression e =
+    elAttr "div" ("class" =: "result") $ do
+        elAttr "div" ("class" =: "heading") $ text "Expression:"
+        elAttr "div" ("class" =: "value"  ) $ text $ prettyU $ e 
+        elAttr "div" ("class" =: "heading") $ text "Value:"
+        elAttr "div" ("class" =: "value"  ) $ text $ prettyR $ evalU $ e 
+        elAttr "div" ("class" =: "heading") $ text "Visualization:"
+        elAttr "div" ("class" =: "graphic") $ renderExpression e
+
+renderExpression :: MonadWidget t m => UExp -> m ()
+renderExpression = \case
+        UNat a -> elAttr "table" ("class" =: "nat") $
+                      el "tr" $ text $ T.pack $ show a
+        UNeg a -> elAttr "table" ("class" =: "neg") $
+                      el "tr" $ do el "td" $ text symbolNeg
+                                   el "td" $ renderExpression a
+        UAdd a b -> binop "add" symbolAdd a b
+        USub a b -> binop "sub" symbolSub a b 
+        UMul a b -> binop "mul" symbolMul a b 
+        UDiv a b -> binop "div" symbolDiv a b
+    where
+        binop c o a b =
+            elAttr "table" ("class" =: c) $
+                el "tr" $ do
+                    el "td" $ renderExpression a
+                    el "td" $ text o
+                    el "td" $ renderExpression b
+
+hardSpace = "　"
 symbolAdd = "+"
 symbolSub = "−"
 symbolMul = "×"
@@ -77,24 +129,4 @@ symbolDiv = "÷"
 symbolBra = "("
 symbolKet = ")"
 symbolNeg = symbolSub
-
-renderParseResult :: MonadWidget t m => ParseResult -> m ()
-renderParseResult = either (const $ el "div" $ text "") render
-    where
-        render :: MonadWidget t m => UExp -> m ()
-        render = \case
-                UNat a -> elAttr "table" ("class" =: "nat") $ el "tr" $ text $ T.pack $ show a
-                UNeg a -> elAttr "table" ("class" =: "neg") $ el "tr" $ do el "td" $ text symbolNeg
-                                                                           el "td" $ render a
-                UAdd a b -> binop "add" symbolAdd a b
-                USub a b -> binop "sub" symbolSub a b 
-                UMul a b -> binop "mul" symbolMul a b 
-                UDiv a b -> binop "div" symbolDiv a b
-            where
-                binop c o a b =
-                    elAttr "table" ("class" =: c) $
-                        el "tr" $ do
-                            el "td" $ render a
-                            el "td" $ text o
-                            el "td" $ render b
 
