@@ -8,13 +8,13 @@
 
 module Calculator.Types where
 
-import Numeric.Natural (Natural)
+import Calculator.Value
 import Prelude hiding (Exp, exp)
 
 -- Typed expression trees.
 
 data Exp a where
-    Nat :: !Natural -> Exp Nat
+    Val :: !Value -> Exp Val
     Neg :: CNeg x => !(Exp x) -> Exp Neg
     Bra :: CBra x => !(Exp x) -> Exp Bra
     Add :: CAdd x y => !(Exp x) -> !(Exp y) -> Exp Add
@@ -32,7 +32,7 @@ class CMulR a -- 'a' can be the right operand in a multiplication
 type CAdd a b = (CAddL a, CAddR b) -- 'a' and 'b' can be added together
 type CMul a b = (CMulL a, CMulR b) -- 'a' can 'b' can be multiplied together
 
-data Nat; instance CNeg Nat;                  ; instance CAddL Nat; instance CAddR Nat; instance CMulL Nat; instance CMulR Nat
+data Val; instance CNeg Val;                  ; instance CAddL Val; instance CAddR Val; instance CMulL Val; instance CMulR Val
 data Neg;                  ; instance CBra Neg; instance CAddL Neg;                   ;                   ;
 data Bra; instance CNeg Bra;                  ; instance CAddL Bra; instance CAddR Bra; instance CMulL Bra; instance CMulR Bra
 data Add;                  ; instance CBra Add; instance CAddL Add;                   ;                   ;
@@ -58,7 +58,7 @@ instance Show TExp where show (TExp e) = show e
 -- Untyped expression trees.
 
 data UExp
-    = UNat !Natural
+    = UVal !Value
     | UNeg !UExp
     | UAdd !UExp !UExp
     | USub !UExp !UExp
@@ -69,7 +69,7 @@ data UExp
 {-| Converts expression trees from typed to untyped. -}
 toUExp :: Exp a -> UExp
 toUExp = \case
-    Nat a -> UNat a
+    Val a -> UVal a
     Neg a -> UNeg (toUExp a)
     Bra a -> toUExp a
     Add a b -> UAdd (toUExp a) (toUExp b)
@@ -80,7 +80,7 @@ toUExp = \case
 {-| Converts expression trees from untyped to typed. -}
 toTExp :: UExp -> TExp
 toTExp = \case
-        UNat a   -> TExp $ Nat a
+        UVal a   -> TExp $ Val a
         UNeg a   -> TExp $ neg a
         UAdd a b -> TExp $ add a b
         USub a b -> TExp $ sub a b
@@ -88,7 +88,7 @@ toTExp = \case
         UDiv a b -> TExp $ div a b
     where
         neg = \case
-            UNat a   -> Neg $ Nat a
+            UVal a   -> Neg $ Val a
             UNeg a   -> Neg $ Bra $ neg a
             UAdd a b -> Neg $ Bra $ add a b
             USub a b -> Neg $ Bra $ sub a b
@@ -101,7 +101,7 @@ toTExp = \case
         div a b = divAny (mulL a) (mulR b)
 
         addL = \case
-            UNat a   -> AddL $ Nat a
+            UVal a   -> AddL $ Val a
             UNeg a   -> AddL $ neg a
             UAdd a b -> AddL $ add a b
             USub a b -> AddL $ sub a b
@@ -109,7 +109,7 @@ toTExp = \case
             UDiv a b -> AddL $ div a b
 
         addR = \case
-            UNat a   -> AddR $ Nat a
+            UVal a   -> AddR $ Val a
             UNeg a   -> AddR $ Bra $ neg a
             UAdd a b -> AddR $ Bra $ add a b
             USub a b -> AddR $ Bra $ sub a b
@@ -117,7 +117,7 @@ toTExp = \case
             UDiv a b -> AddR $ div a b
 
         mulL = \case
-            UNat a   -> MulL $ Nat a
+            UVal a   -> MulL $ Val a
             UNeg a   -> MulL $ Bra $ neg a
             UAdd a b -> MulL $ Bra $ add a b
             USub a b -> MulL $ Bra $ sub a b
@@ -125,7 +125,7 @@ toTExp = \case
             UDiv a b -> MulL $ div a b
 
         mulR = \case
-            UNat a   -> MulR $ Nat a
+            UVal a   -> MulR $ Val a
             UNeg a   -> MulR $ Bra $ neg a
             UAdd a b -> MulR $ Bra $ add a b
             USub a b -> MulR $ Bra $ sub a b

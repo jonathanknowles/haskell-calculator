@@ -6,6 +6,7 @@ import Calculator.Evaluation
 import Calculator.Parsing
 import Calculator.Printing
 import Calculator.Tokens
+import Calculator.Value
 
 import Control.Monad (forever)
 import Data.Monoid ((<>))
@@ -29,7 +30,7 @@ calculate :: Text -> Text
 calculate e =
     case parseUExp $ stripSpaces e of
         Left e -> "Syntax error! Please try again."
-        Right r -> prettyU r <> textEqu <> prettyR (evalU r)
+        Right r -> prettyU r <> textEqu <> prettyV (evalU r)
 
 stripSpaces :: Text -> Text
 stripSpaces = T.filter (/= ' ')

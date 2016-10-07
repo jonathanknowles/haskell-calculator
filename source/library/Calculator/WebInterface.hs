@@ -11,13 +11,12 @@ import Calculator.Evaluation
 import Calculator.Parsing
 import Calculator.Printing
 import Calculator.Types
-
+import Calculator.Value
 import Control.Applicative ((<$>), (<*>))
 import Control.Monad (forM, forM_)
 import Data.Text.Encoding (encodeUtf8)
 import Data.Monoid ((<>))
 import Data.Text (Text)
-
 import Reflex
 import Reflex.Class (fmapMaybe)
 import Reflex.Dom
@@ -34,7 +33,7 @@ css = encodeUtf8 $ T.unlines
     , "table.sub {border-color: #008800; background-color: #88ff88}"
     , "table.mul {border-color: #0000ff; background-color: #8888ff}"
     , "table.div {border-color: #bb00bb; background-color: #bb88bb}"
-    , "table.nat {border-color: #444444; background-color: #ffffff}"
+    , "table.val {border-color: #444444; background-color: #ffffff}"
     , "table.neg {border-color: #008800; background-color: #88ff88}"
     , "input {border: solid 0.2em; padding: 0.2em; width: 90%}"
     , "input.valid {border-color: #444444}"
@@ -94,14 +93,14 @@ evaluateExpression e =
         elAttr "div" ("class" =: "heading") $ text "Expression:"
         elAttr "div" ("class" =: "value"  ) $ text $ prettyU $ e 
         elAttr "div" ("class" =: "heading") $ text "Value:"
-        elAttr "div" ("class" =: "value"  ) $ text $ prettyR $ evalU $ e 
+        elAttr "div" ("class" =: "value"  ) $ text $ prettyV $ evalU $ e 
         elAttr "div" ("class" =: "heading") $ text "Visualization:"
         elAttr "div" ("class" =: "graphic") $ renderExpression e
 
 renderExpression :: MonadWidget t m => UExp -> m ()
 renderExpression = \case
-        UNat a -> elAttr "table" ("class" =: "nat") $
-                      el "tr" $ text $ T.pack $ show a
+        UVal a -> elAttr "table" ("class" =: "val") $
+                      el "tr" $ text $ prettyV a
         UNeg a -> elAttr "table" ("class" =: "neg") $
                       el "tr" $ do el "td" $ text symbolNeg
                                    el "td" $ renderExpression a

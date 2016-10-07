@@ -6,6 +6,7 @@ import Calculator.Parsing
 import Calculator.Printing
 import Calculator.Tokens
 import Calculator.Types
+import Calculator.Value
 
 import Control.Applicative ((<$>), (<*>))
 import Data.Monoid ((<>))
@@ -51,7 +52,7 @@ propNoDoubleOperators e = not $ or
 instance Arbitrary UExp where
     arbitrary = sized tree
         where
-            tree 0 = UNat <$> arbitrary
+            tree 0 = UVal <$> arbitrary
             tree n = oneof
                     [ UNeg <$> x
                     , UAdd <$> x <*> x
@@ -61,7 +62,7 @@ instance Arbitrary UExp where
                 where
                     x = tree $ n * 2 `div` 3
     shrink = \case
-            UNat n -> UNat <$> shrink n
+            UVal n -> UVal <$> shrink n
             UNeg a -> a : (UNeg <$> shrink a)
             UAdd a b -> s UAdd a b
             USub a b -> s USub a b
@@ -74,4 +75,7 @@ instance Arbitrary UExp where
 
 instance Arbitrary TExp where
     arbitrary = toTExp <$> arbitrary
+
+instance Arbitrary Value where
+    arbitrary = fromInteger <$> arbitrary
 

@@ -3,18 +3,19 @@
 
 module Calculator.Evaluation where
 
+import Calculator.Value
 import Calculator.Types
 import Prelude hiding (Exp, exp)
 
-evalT :: TExp -> Rational
+evalT :: TExp -> Value
 evalT (TExp e) = eval e
 
-evalU :: UExp -> Rational
+evalU :: UExp -> Value
 evalU = evalT . toTExp
 
-eval :: Exp a -> Rational
+eval :: Exp a -> Value
 eval = \case
-    Nat a -> fromIntegral a
+    Val a -> a
     Neg a -> negate $ eval a
     Bra a -> eval a
     Add a b -> eval a + eval b

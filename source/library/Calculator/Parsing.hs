@@ -32,13 +32,13 @@ bracketsMatch t = T.foldl f 0 t == 0
                 | otherwise = a
 
 uExp :: Parser UExp
-uExp = choice [x <* endOfInput | x <- [bra, add, mul, neg, nat]]
+uExp = choice [x <* endOfInput | x <- [bra, add, mul, neg, val]]
     where
-        nat = UNat <$> (ss *> decimal <* ss)
-        neg = UNeg <$> (ss *> choice [char charNeg *> x | x <- [bra, nat]])
-        bra = ss *> choice [char charBra *> x <* char charKet | x <- [bra, add, mul, neg, nat]] <* ss
-        add = chainL (choice [mul, nat, neg, bra]) addOp (choice [mul, nat, bra])
-        mul = chainL (choice [nat, bra]) mulOp (choice [nat, bra])
+        val = UVal . fromInteger <$> (ss *> decimal <* ss)
+        neg = UNeg <$> (ss *> choice [char charNeg *> x | x <- [bra, val]])
+        bra = ss *> choice [char charBra *> x <* char charKet | x <- [bra, add, mul, neg, val]] <* ss
+        add = chainL (choice [mul, val, neg, bra]) addOp (choice [mul, val, bra])
+        mul = chainL (choice [val, bra]) mulOp (choice [val, bra])
         addOp = choice [char charAdd *> pure UAdd, char charSub *> pure USub]
         mulOp = choice [char charMul *> pure UMul, char charDiv *> pure UDiv]
         ss = skipSpace

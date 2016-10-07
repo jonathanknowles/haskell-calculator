@@ -19,6 +19,7 @@ library
                         Calculator.Test,
                         Calculator.Tokens,
                         Calculator.Types,
+                        Calculator.Value,
                         Calculator.WebInterface
     build-depends:      attoparsec      >= 0.13.0.1 && < 1,
                         base            >= 4.7      && < 5,
