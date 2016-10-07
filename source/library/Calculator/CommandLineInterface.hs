@@ -30,7 +30,7 @@ calculate :: Text -> Text
 calculate e =
     case parseUExp $ stripSpaces e of
         Left e -> "Syntax error! Please try again."
-        Right r -> pretty r <> textEqu <> pretty (evalU r)
+        Right r -> pretty r <> textEqu <> pretty (eval r)
 
 stripSpaces :: Text -> Text
 stripSpaces = T.filter (/= ' ')

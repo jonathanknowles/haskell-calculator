@@ -92,7 +92,7 @@ evaluateExpression e =
         elAttr "div" ("class" =: "heading") $ text "Expression:"
         elAttr "div" ("class" =: "value"  ) $ text $ pretty $ e 
         elAttr "div" ("class" =: "heading") $ text "Value:"
-        elAttr "div" ("class" =: "value"  ) $ text $ pretty $ evalU $ e 
+        elAttr "div" ("class" =: "value"  ) $ text $ pretty $ eval $ e 
         elAttr "div" ("class" =: "heading") $ text "Visualization:"
         elAttr "div" ("class" =: "graphic") $ renderExpression e
 
