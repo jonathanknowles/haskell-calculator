@@ -5,7 +5,7 @@ module Calculator.Evaluation where
 
 import Calculator.Value
 import Calculator.Types
-import Prelude hiding (Exp, exp)
+import Prelude hiding (exp)
 
 evalT :: TExp -> Value
 evalT (TExp e) = eval e

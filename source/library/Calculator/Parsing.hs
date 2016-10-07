@@ -10,7 +10,7 @@ import Control.Applicative ((<$>), (<*>), (<|>))
 import Data.Attoparsec.Text
 import Data.Text (Text)
 
-import Prelude hiding (Exp, exp)
+import Prelude hiding (exp)
 
 import qualified Data.Text as T
 

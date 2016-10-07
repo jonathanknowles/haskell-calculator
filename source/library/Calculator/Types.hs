@@ -9,7 +9,7 @@
 module Calculator.Types where
 
 import Calculator.Value
-import Prelude hiding (Exp, exp)
+import Prelude hiding (exp)
 
 -- Typed expression trees.
 

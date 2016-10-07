@@ -7,7 +7,6 @@ import Calculator.Parsing
 import Calculator.Pretty
 import Calculator.Printing
 import Calculator.Tokens
-import Calculator.Value
 
 import Control.Monad (forever)
 import Data.Monoid ((<>))

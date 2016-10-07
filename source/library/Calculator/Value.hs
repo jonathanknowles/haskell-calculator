@@ -13,7 +13,6 @@ import Calculator.Tokens
 import Control.Applicative ((<$>), (<*>))
 import Data.Monoid ((<>))
 import Data.Ratio (denominator, numerator)
-import Data.Text (Text)
 
 import qualified Data.Text as T
 

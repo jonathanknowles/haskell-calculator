@@ -3,16 +3,11 @@
 
 module Calculator.Printing where
 
-import Calculator.Evaluation
 import Calculator.Pretty
 import Calculator.Tokens
 import Calculator.Types
-import Calculator.Value
 
 import Data.Monoid ((<>))
-import Data.Text (Text)
-
-import qualified Data.Text as T
 
 instance Pretty UExp where
     pretty = pretty . toTExp

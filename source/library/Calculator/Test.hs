@@ -12,11 +12,10 @@ import Calculator.Value
 import Control.Applicative ((<$>), (<*>))
 import Data.Monoid ((<>))
 import Test.QuickCheck
-import Test.QuickCheck.Arbitrary
 
 import qualified Data.Text as T
 
-import Prelude hiding (Exp, exp)
+import Prelude hiding (exp)
 
 main :: IO ()
 main = do

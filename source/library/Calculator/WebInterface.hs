@@ -14,9 +14,7 @@ import Calculator.Printing
 import Calculator.Types
 import Calculator.Value
 import Control.Applicative ((<$>), (<*>))
-import Control.Monad (forM, forM_)
 import Data.Text.Encoding (encodeUtf8)
-import Data.Monoid ((<>))
 import Data.Text (Text)
 import Reflex
 import Reflex.Class (fmapMaybe)
