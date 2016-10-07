@@ -4,6 +4,7 @@ module Calculator.CommandLineInterface where
 
 import Calculator.Evaluation
 import Calculator.Parsing
+import Calculator.Pretty
 import Calculator.Printing
 import Calculator.Tokens
 import Calculator.Value
@@ -30,7 +31,7 @@ calculate :: Text -> Text
 calculate e =
     case parseUExp $ stripSpaces e of
         Left e -> "Syntax error! Please try again."
-        Right r -> prettyU r <> textEqu <> prettyV (evalU r)
+        Right r -> pretty r <> textEqu <> pretty (evalU r)
 
 stripSpaces :: Text -> Text
 stripSpaces = T.filter (/= ' ')

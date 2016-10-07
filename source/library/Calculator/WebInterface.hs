@@ -9,6 +9,7 @@ module Calculator.WebInterface where
 
 import Calculator.Evaluation
 import Calculator.Parsing
+import Calculator.Pretty
 import Calculator.Printing
 import Calculator.Types
 import Calculator.Value
@@ -91,16 +92,16 @@ evaluateExpression :: MonadWidget t m => UExp -> m ()
 evaluateExpression e =
     elAttr "div" ("class" =: "result") $ do
         elAttr "div" ("class" =: "heading") $ text "Expression:"
-        elAttr "div" ("class" =: "value"  ) $ text $ prettyU $ e 
+        elAttr "div" ("class" =: "value"  ) $ text $ pretty $ e 
         elAttr "div" ("class" =: "heading") $ text "Value:"
-        elAttr "div" ("class" =: "value"  ) $ text $ prettyV $ evalU $ e 
+        elAttr "div" ("class" =: "value"  ) $ text $ pretty $ evalU $ e 
         elAttr "div" ("class" =: "heading") $ text "Visualization:"
         elAttr "div" ("class" =: "graphic") $ renderExpression e
 
 renderExpression :: MonadWidget t m => UExp -> m ()
 renderExpression = \case
         UVal a -> elAttr "table" ("class" =: "val") $
-                      el "tr" $ text $ prettyV a
+                      el "tr" $ text $ pretty a
         UNeg a -> elAttr "table" ("class" =: "neg") $
                       el "tr" $ do el "td" $ text symbolNeg
                                    el "td" $ renderExpression a

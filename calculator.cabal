@@ -15,6 +15,7 @@ library
     exposed-modules:    Calculator.CommandLineInterface,
                         Calculator.Evaluation,
                         Calculator.Parsing,
+                        Calculator.Pretty,
                         Calculator.Printing,
                         Calculator.Test,
                         Calculator.Tokens,

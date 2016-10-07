@@ -3,6 +3,7 @@
 module Calculator.Test where
 
 import Calculator.Parsing
+import Calculator.Pretty
 import Calculator.Printing
 import Calculator.Tokens
 import Calculator.Types
@@ -28,7 +29,7 @@ main = do
 -}
 propPrintParseIdentity :: UExp -> Bool
 propPrintParseIdentity e =
-    case parseUExp (prettyU e) of
+    case parseUExp (pretty e) of
         Left e -> False
         Right r -> e == r
 
@@ -38,7 +39,7 @@ propPrintParseIdentity e =
 -}
 propNoDoubleOperators :: TExp -> Bool
 propNoDoubleOperators e = not $ or
-        [x `T.isInfixOf` prettyT e | x <- doubleOperators]
+        [x `T.isInfixOf` pretty e | x <- doubleOperators]
     where
         doubleOperators = [ T.pack [ x, y ]
                           | x <- singleOperators

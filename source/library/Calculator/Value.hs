@@ -4,11 +4,12 @@
 module Calculator.Value
     ( Value
     , Error (..)
-    , prettyV
     , value
     ) where
 
+import Calculator.Pretty
 import Calculator.Tokens
+
 import Control.Applicative ((<$>), (<*>))
 import Data.Monoid ((<>))
 import Data.Ratio (denominator, numerator)
@@ -41,14 +42,15 @@ instance Fractional Value where
             else Right $ a / b
 
 instance Show Value where
-	show = T.unpack . prettyV
+    show = T.unpack . pretty
 
-prettyV :: Value -> Text
-prettyV = value
-        (\DivisionByZero -> "<division by zero>")
-        (\r -> if denominator r == 1
-                   then n r
-                   else n r <> textDiv <> d r)
-    where
-        n = T.pack . show . numerator
-        d = T.pack . show . denominator
+instance Pretty Value where
+    pretty = value
+            (\DivisionByZero -> "<division by zero>")
+            (\r -> if denominator r == 1
+                       then n r
+                       else n r <> textDiv <> d r)
+        where
+            n = T.pack . show . numerator
+            d = T.pack . show . denominator
+

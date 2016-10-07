@@ -4,27 +4,29 @@
 module Calculator.Printing where
 
 import Calculator.Evaluation
+import Calculator.Pretty
 import Calculator.Tokens
 import Calculator.Types
 import Calculator.Value
+
 import Data.Monoid ((<>))
 import Data.Text (Text)
 
 import qualified Data.Text as T
 
-prettyU :: UExp -> Text
-prettyU = prettyT . toTExp
+instance Pretty UExp where
+    pretty = pretty . toTExp
 
-prettyT :: TExp -> Text
-prettyT (TExp e) = prettyE e
+instance Pretty TExp where
+    pretty (TExp e) = pretty e
 
-prettyE :: Exp a -> Text
-prettyE = \case
-    Val a -> prettyV a
-    Neg a -> textNeg <> prettyE a
-    Bra a -> textBra <> prettyE a <> textKet
-    Add a b -> prettyE a <> textAdd <> prettyE b
-    Sub a b -> prettyE a <> textSub <> prettyE b
-    Mul a b -> prettyE a <> textMul <> prettyE b
-    Div a b -> prettyE a <> textDiv <> prettyE b
+instance Pretty (Exp a) where
+    pretty = \case
+        Val a -> pretty a
+        Neg a -> textNeg <> pretty a
+        Bra a -> textBra <> pretty a <> textKet
+        Add a b -> pretty a <> textAdd <> pretty b
+        Sub a b -> pretty a <> textSub <> pretty b
+        Mul a b -> pretty a <> textMul <> pretty b
+        Div a b -> pretty a <> textDiv <> pretty b
 
