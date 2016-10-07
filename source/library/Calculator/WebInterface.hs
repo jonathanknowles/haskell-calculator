@@ -47,7 +47,7 @@ css = encodeUtf8 $ T.unlines
 main = mainWidgetWithCss css $ el "div" $ do
         parseResult <- expressionInput
         maybeExpression <- holdDyn Nothing $ removeInvalidExpressions parseResult
-        dyn =<< mapDyn maybeEvaluateExpression maybeExpression
+        dyn $ maybeEvaluateExpression <$> maybeExpression
         pure ()
     where
         maybeEvaluateExpression = maybe
@@ -64,9 +64,9 @@ expressionInput = do
         elAttr "div" ("class" =: "heading") $ text "Enter an arithmetic expression:"
         rec t <- el "div" $ textInput $ def & textInputConfig_initialValue .~ T.empty
                                             & textInputConfig_attributes   .~ c
-            r <- mapDyn maybeParse $ _textInput_value t
-            c <- mapDyn resultClass r
-            elAttr "div" ("class" =: "feedback") $ dyn =<< mapDyn feedbackText r
+            let c = resultClass <$> r
+                r = maybeParse <$> _textInput_value t
+            elAttr "div" ("class" =: "feedback") $ dyn $ feedbackText <$> r
         return r
     where
         maybeParse x = if T.null x then Nothing
