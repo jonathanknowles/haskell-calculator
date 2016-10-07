@@ -24,7 +24,7 @@ import Reflex.Dom
 import qualified Data.Text as T
 
 css = T.unlines
-    [ "* {font-size: 14pt; font-family: 'Liberation Sans', 'Lato', sans-serif}"
+    [ "* {font-size: 12pt; font-family: sans-serif}"
     , "body {background-color: #aaaaaa; padding: 1em; margin: 0em}"
       -- Links
     , "a:link {text-decoration: none}"
@@ -138,8 +138,6 @@ evaluateExpression :: MonadWidget t m => UExp -> m ()
 evaluateExpression e =
     elAttr "div" ("class" =: "result") $ do
         elAttr "div" ("class" =: "heading") $ text "Result:"
-        elAttr "div" ("class" =: "value"  ) $ text $ pretty $ e
-        elAttr "div" ("class" =: "heading") $ text "Value:"
         elAttr "div" ("class" =: "value"  ) $ text $ pretty $ eval $ e
         elAttr "div" ("class" =: "heading") $ text "Visualization:"
         elAttr "div" ("class" =: "graphic") $ renderExpression e
