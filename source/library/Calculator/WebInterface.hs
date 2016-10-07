@@ -25,8 +25,8 @@ import qualified Data.Text as T
 css = encodeUtf8 $ T.unlines
     [ "* {font: 15pt sans-serif}"
     , "body {background-color: #aaaaaa; padding: 1em; margin: 0em}"
-    , "table {border: solid 0.2em; text-align: center; padding: 0.2em}" 
-    , "td {text-align: center; vertical-align: center}"         
+    , "table {border: solid 0.2em; text-align: center; padding: 0.2em}"
+    , "td {text-align: center; vertical-align: center}"
     , "tr {padding: 0em; border: 0em; margin: 0em}"
     , "table.add {border-color: #ff0000; background-color: #ff8888}"
     , "table.sub {border-color: #008800; background-color: #88ff88}"
@@ -90,9 +90,9 @@ evaluateExpression :: MonadWidget t m => UExp -> m ()
 evaluateExpression e =
     elAttr "div" ("class" =: "result") $ do
         elAttr "div" ("class" =: "heading") $ text "Expression:"
-        elAttr "div" ("class" =: "value"  ) $ text $ pretty $ e 
+        elAttr "div" ("class" =: "value"  ) $ text $ pretty $ e
         elAttr "div" ("class" =: "heading") $ text "Value:"
-        elAttr "div" ("class" =: "value"  ) $ text $ pretty $ eval $ e 
+        elAttr "div" ("class" =: "value"  ) $ text $ pretty $ eval $ e
         elAttr "div" ("class" =: "heading") $ text "Visualization:"
         elAttr "div" ("class" =: "graphic") $ renderExpression e
 
@@ -104,8 +104,8 @@ renderExpression = \case
                       el "tr" $ do el "td" $ text symbolNeg
                                    el "td" $ renderExpression a
         UAdd a b -> binop "add" symbolAdd a b
-        USub a b -> binop "sub" symbolSub a b 
-        UMul a b -> binop "mul" symbolMul a b 
+        USub a b -> binop "sub" symbolSub a b
+        UMul a b -> binop "mul" symbolMul a b
         UDiv a b -> binop "div" symbolDiv a b
     where
         binop c o a b =

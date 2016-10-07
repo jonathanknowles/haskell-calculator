@@ -28,8 +28,8 @@ instance Num Value where
     abs (V a)     = V $ abs    <$> a
     signum (V a)  = V $ signum <$> a
     negate (V a)  = V $ negate <$> a
-    V a + V b     = V $ (+) <$> a <*> b 
-    V a * V b     = V $ (*) <$> a <*> b 
+    V a + V b     = V $ (+) <$> a <*> b
+    V a * V b     = V $ (*) <$> a <*> b
 
 instance Fractional Value where
     fromRational a = V $ pure $ fromRational a

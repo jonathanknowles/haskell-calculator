@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-  
+
 module Calculator.CommandLineInterface where
 
 import Calculator.Evaluation

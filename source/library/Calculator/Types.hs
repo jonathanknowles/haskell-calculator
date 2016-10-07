@@ -4,7 +4,7 @@
 {-# LANGUAGE LambdaCase                #-}
 {-# LANGUAGE MultiParamTypeClasses     #-}
 {-# LANGUAGE NoMonomorphismRestriction #-}
-{-# LANGUAGE StandaloneDeriving        #-}   
+{-# LANGUAGE StandaloneDeriving        #-}
 
 module Calculator.Types where
 

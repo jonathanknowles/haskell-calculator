@@ -48,7 +48,7 @@ propNoDoubleOperators e = not $ or
                           , charSub
                           , charMul
                           , charDiv ]
- 
+
 instance Arbitrary UExp where
     arbitrary = sized tree
         where
