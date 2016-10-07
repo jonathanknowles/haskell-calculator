@@ -25,8 +25,9 @@ import qualified Data.Text as T
 
 css = T.unlines
     [ "* {font-size: 12pt; font-family: sans-serif}"
-    , "body {background-color: #aaaaaa; padding: 1em; margin: 0em}"
+    , "body {background-color: #c0c0d0; padding: 1em; margin: 0em}"
       -- Links
+    , "a {color: #4040a0}"
     , "a:link {text-decoration: none}"
     , "a:visited {text-decoration: none}"
     , "a:hover {text-decoration: underline}"
