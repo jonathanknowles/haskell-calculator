@@ -24,7 +24,7 @@ import Reflex.Dom
 import qualified Data.Text as T
 
 css = T.unlines
-    [ "* {font-size: 12pt; font-family: sans-serif}"
+    [ "* {font-size: 12pt; font-family: 'Droid Sans', sans-serif}"
     , "body {background-color: #c0c0d0; padding: 1em; margin: 0em}"
       -- Links
     , "a {color: #4040a0}"
@@ -80,7 +80,7 @@ main = mainWidgetWithHead headSection $ do
 headSection = do
     elAttr "link" ( "rel"  =: "stylesheet" <>
                     "type" =: "text/css"   <>
-                    "href" =: "https://fonts.googleapis.com/css?family=Lato" ) $ text ""
+                    "href" =: "https://fonts.googleapis.com/css?family=Droid+Sans" ) $ text ""
 
     elAttr "style" ( "type" =: "text/css" ) $ text css
 
