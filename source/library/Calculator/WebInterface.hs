@@ -23,6 +23,7 @@ import Reflex.Dom
 
 import qualified Data.Text as T
 
+css :: Text
 css = T.unlines
     [ "* {font-size: 12pt; font-family: 'Droid Sans', sans-serif}"
     , "body {background-color: #c0c0d0; padding: 1em; margin: 0em}"
@@ -61,6 +62,7 @@ css = T.unlines
     , "div.value {background-color: #ffffff; padding: 0.2em 0.4em 0.2em 0.4em; width: 90%}"
     ]
 
+main :: IO ()
 main = mainWidgetWithHead headSection $ do
         introduction
         parseResult <- expressionInput
@@ -77,6 +79,7 @@ main = mainWidgetWithHead headSection $ do
                 (const Nothing)
                 (Just . Just)) . updated
 
+headSection :: MonadWidget t m => m ()
 headSection = do
     elAttr "link" ( "rel"  =: "stylesheet" <>
                     "type" =: "text/css"   <>
@@ -84,6 +87,7 @@ headSection = do
 
     elAttr "style" ( "type" =: "text/css" ) $ text css
 
+introduction :: MonadWidget t m => m ()
 introduction = el "div" $
         el "p" $ do
             text "A "
@@ -99,6 +103,7 @@ introduction = el "div" $
                 elAttr "a" ("href" =: "https://github.com/jonathanknowles/haskell-calculator") $ text "View source code"
             text ")"
 
+help :: MonadWidget t m => m ()
 help = elAttr "div" ("class" =: "help") $
     el "p" $ do
         text "This calculator supports:"
@@ -124,7 +129,6 @@ expressionInput = do
         resultClass = ("class" =:) . maybeEither "empty"
                                           (const "error")
                                           (const "valid")
-
 
 maybeEither :: c -> (a -> c) -> (b -> c) -> Maybe (Either a b) -> c
 maybeEither n l r = \case
