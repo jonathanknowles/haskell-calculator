@@ -93,7 +93,7 @@ evaluateExpression :: MonadWidget t m => UExp -> m ()
 evaluateExpression e =
     divClass "result" $ do
         divClass "heading" $ text "Result:"
-        divClass "value"   $ text $ pretty $ eval $ e
+        divClass "value"   $ text $ pretty $ eval e
         divClass "heading" $ text "Visualization:"
         divClass "graphic" $ renderExpression e
 
