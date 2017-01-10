@@ -54,17 +54,11 @@ body = do introduction
 
 introduction :: DomBuilder t m => m ()
 introduction = div $ p $ do
-        text "A "
-        strong $ text "calculator"
-        text " implemented in "
-        linkHaskell $ text "Haskell"
-        text ", "
-        linkGhcjs $ text "GHCJS"
-        text ", and "
-        linkReflex $ text "Reflex"
-        text ". ("
-        strong $ linkSource $ text "View source code"
-        text ")"
+        text "A " >> strong (text "calculator") >> text " implemented in "
+        linkHaskell (text "Haskell") >> text ", "
+        linkGhcjs   (text "GHCJS"  ) >> text ", and "
+        linkReflex  (text "Reflex" ) >> text ". ("
+        strong $ linkSource $ text "View source code" >> text ")"
     where
         linkHaskell = a "https://www.haskell.org/"
         linkGhcjs   = a "https://github.com/ghcjs/ghcjs"
@@ -90,8 +84,7 @@ expressionInput = do
     where
         maybeParse x = if T.null x then Nothing
                                    else Just $ parseUExp x
-        feedback = text .
-            maybeEither hardSpace id (const hardSpace)
+        feedback = text . maybeEither hardSpace id (const hardSpace)
         resultClass = ("class" =:) . maybeEither "empty"
                                           (const "error")
                                           (const "valid")
@@ -139,18 +132,15 @@ symbolNeg = symbolSub
 
 tableClass c = elAttr "table" ("class" =: c)
 
-div = el "div"
+a href = elAttr "a" ("href" =: href)
 
-tr = el "tr"
-td = el "td"
-ul = el "ul"
-li = el "li"
-
-p = el "p"
-
+div    = el "div"
+tr     = el "tr"
+td     = el "td"
+ul     = el "ul"
+li     = el "li"
+p      = el "p"
 strong = el "strong"
-
-a href  = elAttr "a" ("href" =: href)
 
 -------------------------------------------------------------------------------
 -- Helpers
