@@ -32,7 +32,7 @@ import qualified Data.Text as T
 main :: IO ()
 main = mainWidgetWithHead head body
 
-head :: MonadWidget t m => m ()
+head :: DomBuilder t m => m ()
 head = do styleSheet "https://fonts.googleapis.com/css?family=Droid+Sans"
           styleSheet "style.css"
 
@@ -65,7 +65,7 @@ introduction = div $ p $ do
         linkReflex  = a "https://github.com/reflex-frp/reflex-platform"
         linkSource  = a "https://github.com/jonathanknowles/haskell-calculator"
 
-help :: MonadWidget t m => m ()
+help :: DomBuilder t m => m ()
 help = divClass "help" $ p $ do
     text "This calculator supports:"
     ul $ do li $ text "addition, subtraction, multiplication and division"
