@@ -75,10 +75,10 @@ help :: MonadWidget t m => m ()
 help = divClass "help" $
     el "p" $ do
         text "This calculator supports:"
-        el "ul" $ do
-            el "li" $ text "addition, subtraction, multiplication and division"
-            el "li" $ text "natural numbers"
-            el "li" $ text "parentheses"
+        ul $ do
+            li $ text "addition, subtraction, multiplication and division"
+            li $ text "natural numbers"
+            li $ text "parentheses"
 
 expressionInput :: MonadWidget t m => m (Dynamic t (Maybe (Either Text UExp)))
 expressionInput = do
@@ -143,6 +143,8 @@ tableClass c = elAttr "table" ("class" =: c)
 
 tr = el "tr"
 td = el "td"
+ul = el "ul"
+li = el "li"
 
 a href  = elAttr "a" ("href" =: href)
 
