@@ -53,9 +53,9 @@ body = do introduction
                 (Just . Just)) . updated
 
 introduction :: DomBuilder t m => m ()
-introduction = div $ el "p" $ do
+introduction = div $ p $ do
         text "A "
-        el "strong" $ text "calculator"
+        strong $ text "calculator"
         text " implemented in "
         linkHaskell $ text "Haskell"
         text ", "
@@ -63,7 +63,7 @@ introduction = div $ el "p" $ do
         text ", and "
         linkReflex $ text "Reflex"
         text ". ("
-        el "strong" $ linkSource $ text "View source code"
+        strong $ linkSource $ text "View source code"
         text ")"
     where
         linkHaskell = a "https://www.haskell.org/"
@@ -72,11 +72,9 @@ introduction = div $ el "p" $ do
         linkSource  = a "https://github.com/jonathanknowles/haskell-calculator"
 
 help :: MonadWidget t m => m ()
-help = divClass "help" $
-    el "p" $ do
-        text "This calculator supports:"
-        ul $ do
-            li $ text "addition, subtraction, multiplication and division"
+help = divClass "help" $ p $ do
+    text "This calculator supports:"
+    ul $ do li $ text "addition, subtraction, multiplication and division"
             li $ text "natural numbers"
             li $ text "parentheses"
 
@@ -147,6 +145,10 @@ tr = el "tr"
 td = el "td"
 ul = el "ul"
 li = el "li"
+
+p = el "p"
+
+strong = el "strong"
 
 a href  = elAttr "a" ("href" =: href)
 
