@@ -6,10 +6,12 @@ extra-deps:
   - zenc-0.1.1
 packages:
   - '.'
-  - location:
+  - extra-dep: true
+    location:
         git: git@github.com:/jonathanknowles/reflex
         commit: a63aba90bdea5ae5b3e1506d468613bdfedcdfa3
-  - location:
+  - extra-dep: true
+    location:
         git: git@github.com:/jonathanknowles/reflex-dom
         commit: fca15fd1b8a2dd34e53994553907f648091c7870
 resolver: lts-7.1
