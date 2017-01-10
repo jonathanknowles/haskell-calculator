@@ -1,12 +1,5 @@
-resolver: lts-7.1
 compiler: ghcjs-0.2.1.9007001_ghc-8.0.1
 compiler-check: match-exact
-setup-info:
-  ghcjs:
-    source:
-      ghcjs-0.2.1.9007001_ghc-8.0.1:
-          url: http://tolysz.org/ghcjs/ghc-8.0-2016-09-26-lts-7.1-9007001-mem.tar.gz
-          sha1: e640724883238593e2d2f7f03991cb413ec0347b
 extra-deps:
   - ghcjs-dom-0.2.4.0
   - ref-tf-0.4.0.1
@@ -19,4 +12,11 @@ packages:
   - location:
         git: git@github.com:/jonathanknowles/reflex-dom
         commit: fca15fd1b8a2dd34e53994553907f648091c7870
+resolver: lts-7.1
+setup-info:
+    ghcjs:
+        source:
+            ghcjs-0.2.1.9007001_ghc-8.0.1:
+                url: http://tolysz.org/ghcjs/ghc-8.0-2016-09-26-lts-7.1-9007001-mem.tar.gz
+                sha1: e640724883238593e2d2f7f03991cb413ec0347b
 
