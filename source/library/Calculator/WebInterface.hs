@@ -57,20 +57,19 @@ introduction = el "div" $ el "p" $ do
         text "A "
         el "strong" $ text "calculator"
         text " implemented in "
-        link urlHaskell $ text "Haskell"
+        linkHaskell $ text "Haskell"
         text ", "
-        link urlGhcjs $ text "GHCJS"
+        linkGhcjs $ text "GHCJS"
         text ", and "
-        link urlReflex $ text "Reflex"
+        linkReflex $ text "Reflex"
         text ". ("
-        el "strong" $ link urlSource $ text "View source code"
+        el "strong" $ linkSource $ text "View source code"
         text ")"
     where
-        link href  = elAttr "a" ("href" =: href)
-        urlHaskell = "https://www.haskell.org/"
-        urlGhcjs   = "https://github.com/ghcjs/ghcjs"
-        urlReflex  = "https://github.com/reflex-frp/reflex-platform"
-        urlSource  = "https://github.com/jonathanknowles/haskell-calculator"
+        linkHaskell = a "https://www.haskell.org/"
+        linkGhcjs   = a "https://github.com/ghcjs/ghcjs"
+        linkReflex  = a "https://github.com/reflex-frp/reflex-platform"
+        linkSource  = a "https://github.com/jonathanknowles/haskell-calculator"
 
 help :: MonadWidget t m => m ()
 help = divClass "help" $
@@ -144,6 +143,8 @@ tableClass c = elAttr "table" ("class" =: c)
 
 tr = el "tr"
 td = el "td"
+
+a href  = elAttr "a" ("href" =: href)
 
 -------------------------------------------------------------------------------
 -- Helpers
