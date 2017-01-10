@@ -1,0 +1,41 @@
+* {font-size: 12pt; font-family: 'Droid Sans', sans-serif}
+body {background-color: #c0c0d0; padding: 1em; margin: 0em}
+
+/* Links */
+a {color: #4040a0}
+a:link {text-decoration: none}
+a:visited {text-decoration: none}
+a:hover {text-decoration: underline}
+a:active {text-decoration: underline}
+
+/* Paragraphs */
+p {margin: 0em 0em 1em 0em}
+ul {margin: 0.2em 0em 0.2em 1em}
+
+/* Tables */
+table {border: solid 0.2em; text-align: center; padding: 0.2em; border-radius: 0.4em}
+table.add {border-color: #ff0000; background-color: #ff8888}
+table.sub {border-color: #008800; background-color: #88ff88}
+table.mul {border-color: #0000ff; background-color: #8888ff}
+table.div {border-color: #bb00bb; background-color: #bb88bb}
+table.neg {border-color: #008800; background-color: #88ff88}
+table.val {border-color: #444444; background-color: #ffffff}
+table.val {padding: 0.2em 0.4em 0.2em 0.4em}
+td {text-align: center; vertical-align: center}
+tr {padding: 0em; border: 0em; margin: 0em}
+
+/* Inputs */
+input {border: solid 0.2em; border-radius: 0.4em; padding: 0.2em 0.4em 0.2em 0.4em; width: 90%}
+input:focus {outline: none}
+input.valid {border-color: #444444}
+input.empty {border-color: #444444}
+input.error {border-color: #ff0000}
+
+/* Sections */
+div {padding: 0em; margin: 0em}
+div.result {padding-top: 0.4em}
+div.feedback {padding-top: 0.2em; font-style: italic; font-weight: bold}
+div.heading {padding-top: 0.4em; padding-bottom: 0.2em; font-weight: bold}
+div.value {border: solid 0.2em #444444; border-radius: 0.4em}
+div.value {background-color: #ffffff; padding: 0.2em 0.4em 0.2em 0.4em; width: 90%}
+
