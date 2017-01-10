@@ -17,6 +17,7 @@ import Control.Applicative ((<$>), (<*>))
 import Data.Monoid ((<>))
 import Data.Text.Encoding (encodeUtf8)
 import Data.Text (Text)
+import Prelude hiding (head)
 import Reflex
 import Reflex.Class (fmapMaybe)
 import Reflex.Dom
@@ -25,12 +26,18 @@ import Reflex.Dom.Extras
 import qualified Data.Text as T
 
 main :: IO ()
-main = mainWidgetWithHead headSection $ do
-        introduction
-        parseResult <- expressionInput
-        maybeExpression <- holdDyn Nothing $ removeInvalidExpressions parseResult
-        dyn $ maybeEvaluateExpression <$> maybeExpression
-        pure ()
+main = mainWidgetWithHead head body
+
+head :: MonadWidget t m => m ()
+head = do styleSheet "https://fonts.googleapis.com/css?family=Droid+Sans"
+          styleSheet "style.css"
+
+body :: MonadWidget t m => m ()
+body = do introduction
+          parseResult <- expressionInput
+          maybeExpression <- holdDyn Nothing $ removeInvalidExpressions parseResult
+          dyn $ maybeEvaluateExpression <$> maybeExpression
+          pure ()
     where
         maybeEvaluateExpression = maybe
             help
@@ -40,11 +47,6 @@ main = mainWidgetWithHead headSection $ do
                 (Just Nothing)
                 (const Nothing)
                 (Just . Just)) . updated
-
-headSection :: MonadWidget t m => m ()
-headSection = do
-    styleSheet "https://fonts.googleapis.com/css?family=Droid+Sans"
-    styleSheet "style.css"
 
 introduction :: MonadWidget t m => m ()
 introduction = el "div" $
