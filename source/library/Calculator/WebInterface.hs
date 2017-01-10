@@ -17,7 +17,7 @@ import Control.Applicative ((<$>), (<*>))
 import Data.Monoid ((<>))
 import Data.Text.Encoding (encodeUtf8)
 import Data.Text (Text)
-import Prelude hiding (head)
+import Prelude hiding (div, head)
 import Reflex
 import Reflex.Class (fmapMaybe)
 import Reflex.Dom
@@ -53,7 +53,7 @@ body = do introduction
                 (Just . Just)) . updated
 
 introduction :: DomBuilder t m => m ()
-introduction = el "div" $ el "p" $ do
+introduction = div $ el "p" $ do
         text "A "
         el "strong" $ text "calculator"
         text " implemented in "
@@ -83,8 +83,8 @@ help = divClass "help" $
 expressionInput :: MonadWidget t m => m (Dynamic t (Maybe (Either Text UExp)))
 expressionInput = do
         divClass "heading" $ text "Enter an arithmetic expression:"
-        rec t <- el "div" $ textInput $ def & textInputConfig_initialValue .~ T.empty
-                                            & textInputConfig_attributes   .~ c
+        rec t <- div $ textInput $ def & textInputConfig_initialValue .~ T.empty
+                                       & textInputConfig_attributes   .~ c
             let c = resultClass <$> r
                 r = maybeParse <$> _textInput_value t
             divClass "feedback" $ dyn $ feedback <$> r
@@ -140,6 +140,8 @@ symbolNeg = symbolSub
 -------------------------------------------------------------------------------
 
 tableClass c = elAttr "table" ("class" =: c)
+
+div = el "div"
 
 tr = el "tr"
 td = el "td"
