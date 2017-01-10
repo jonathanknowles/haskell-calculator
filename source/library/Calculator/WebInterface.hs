@@ -109,22 +109,19 @@ evaluateExpression e =
 
 renderExpression :: MonadWidget t m => UExp -> m ()
 renderExpression = \case
-        UVal a -> elAttr "table" ("class" =: "val") $
-                      el "tr" $ text $ pretty a
-        UNeg a -> elAttr "table" ("class" =: "neg") $
-                      el "tr" $ do el "td" $ text symbolNeg
-                                   el "td" $ renderExpression a
+        UVal a -> tableClass "val" $ tr $ text $ pretty a
+        UNeg a -> tableClass "neg" $ tr $ do td $ text symbolNeg
+                                             td $ renderExpression a
         UAdd a b -> binop "add" symbolAdd a b
         USub a b -> binop "sub" symbolSub a b
         UMul a b -> binop "mul" symbolMul a b
         UDiv a b -> binop "div" symbolDiv a b
     where
         binop c o a b =
-            elAttr "table" ("class" =: c) $
-                el "tr" $ do
-                    el "td" $ renderExpression a
-                    el "td" $ text o
-                    el "td" $ renderExpression b
+            tableClass c $ tr $ do
+                td $ renderExpression a
+                td $ text o
+                td $ renderExpression b
 
 -------------------------------------------------------------------------------
 -- Symbols
@@ -138,6 +135,15 @@ symbolDiv = "÷"
 symbolBra = "("
 symbolKet = ")"
 symbolNeg = symbolSub
+
+-------------------------------------------------------------------------------
+-- DOM builders
+-------------------------------------------------------------------------------
+
+tableClass c = elAttr "table" ("class" =: c)
+
+tr = el "tr"
+td = el "td"
 
 -------------------------------------------------------------------------------
 -- Helpers
