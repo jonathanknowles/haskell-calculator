@@ -25,6 +25,10 @@ import Reflex.Dom.Extras
 
 import qualified Data.Text as T
 
+-------------------------------------------------------------------------------
+-- Page structure
+-------------------------------------------------------------------------------
+
 main :: IO ()
 main = mainWidgetWithHead head body
 
@@ -95,15 +99,6 @@ expressionInput = do
                                           (const "error")
                                           (const "valid")
 
-maybeEither :: c -> (a -> c) -> (b -> c) -> Maybe (Either a b) -> c
-maybeEither n l r = \case
-    Nothing        -> n
-    Just (Left  x) -> l x
-    Just (Right x) -> r x
-
-maybeEither' :: Maybe (Either a b) -> Maybe b
-maybeEither' = maybeEither Nothing (const Nothing) Just
-
 evaluateExpression :: MonadWidget t m => UExp -> m ()
 evaluateExpression e =
     divClass "result" $ do
@@ -131,6 +126,10 @@ renderExpression = \case
                     el "td" $ text o
                     el "td" $ renderExpression b
 
+-------------------------------------------------------------------------------
+-- Symbols
+-------------------------------------------------------------------------------
+
 hardSpace = "　"
 symbolAdd = "+"
 symbolSub = "−"
@@ -139,4 +138,17 @@ symbolDiv = "÷"
 symbolBra = "("
 symbolKet = ")"
 symbolNeg = symbolSub
+
+-------------------------------------------------------------------------------
+-- Helpers
+-------------------------------------------------------------------------------
+
+maybeEither :: c -> (a -> c) -> (b -> c) -> Maybe (Either a b) -> c
+maybeEither n l r = \case
+    Nothing        -> n
+    Just (Left  x) -> l x
+    Just (Right x) -> r x
+
+maybeEither' :: Maybe (Either a b) -> Maybe b
+maybeEither' = maybeEither Nothing (const Nothing) Just
 
