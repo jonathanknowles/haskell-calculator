@@ -65,7 +65,7 @@ introduction = el "div" $
             text ")"
 
 help :: MonadWidget t m => m ()
-help = elAttr "div" ("class" =: "help") $
+help = divClass "help" $
     el "p" $ do
         text "This calculator supports:"
         el "ul" $ do
@@ -75,12 +75,12 @@ help = elAttr "div" ("class" =: "help") $
 
 expressionInput :: MonadWidget t m => m (Dynamic t (Maybe (Either Text UExp)))
 expressionInput = do
-        elAttr "div" ("class" =: "heading") $ text "Enter an arithmetic expression:"
+        divClass "heading" $ text "Enter an arithmetic expression:"
         rec t <- el "div" $ textInput $ def & textInputConfig_initialValue .~ T.empty
                                             & textInputConfig_attributes   .~ c
             let c = resultClass <$> r
                 r = maybeParse <$> _textInput_value t
-            elAttr "div" ("class" =: "feedback") $ dyn $ feedback <$> r
+            divClass "feedback" $ dyn $ feedback <$> r
         return r
     where
         maybeParse x = if T.null x then Nothing
@@ -102,11 +102,11 @@ maybeEither' = maybeEither Nothing (const Nothing) Just
 
 evaluateExpression :: MonadWidget t m => UExp -> m ()
 evaluateExpression e =
-    elAttr "div" ("class" =: "result") $ do
-        elAttr "div" ("class" =: "heading") $ text "Result:"
-        elAttr "div" ("class" =: "value"  ) $ text $ pretty $ eval $ e
-        elAttr "div" ("class" =: "heading") $ text "Visualization:"
-        elAttr "div" ("class" =: "graphic") $ renderExpression e
+    divClass "result" $ do
+        divClass "heading" $ text "Result:"
+        divClass "value"   $ text $ pretty $ eval $ e
+        divClass "heading" $ text "Visualization:"
+        divClass "graphic" $ renderExpression e
 
 renderExpression :: MonadWidget t m => UExp -> m ()
 renderExpression = \case
