@@ -1,9 +1,9 @@
 Haskell Calculator
 ==================
 
-A simple four-function calculator, implemented in Haskell.
+A simple four-function visual calculator, implemented in Haskell.
 
-This calculator is capable of evaluating arithmetic expressions such as "<code>1+1</code>" or "<code>(1+2)*(3+4)</code>". Expressions can contain natural numbers and any of the standard arithmetic operators: addition, subtraction, multiplication, and division. Unary negation and nesting sub-expressions within parentheses are also supported. (Non-natural numbers are not supported.)
+This calculator is capable of evaluating (and visualizing) arithmetic expressions such as "<code>1+1</code>" or "<code>(1+2)*(3+4)</code>". Expressions can contain natural numbers and any of the standard arithmetic operators: addition, subtraction, multiplication, and division. Unary negation and nesting sub-expressions within parentheses are also supported. (Non-natural numbers are not supported.)
 
 Demonstration
 -------------
