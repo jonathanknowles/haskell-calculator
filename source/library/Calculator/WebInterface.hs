@@ -33,18 +33,27 @@ main :: IO ()
 main = mainWidgetWithHead head body
 
 head :: DomBuilder t m => m ()
-head = do styleSheet "https://fonts.googleapis.com/css?family=Droid+Sans"
+head = do styleSheet "https://fonts.googleapis.com/css?family=Noto"
+          styleSheet "https://fonts.googleapis.com/css?family=Roboto"
           styleSheet "style.css"
 
 body :: MonadWidget t m => m ()
-body = do introduction
-          parseResult <- expressionInput
-          maybeExpression <- holdDyn Nothing $ removeInvalidExpressions parseResult
-          dyn $ maybeEvaluateExpression <$> maybeExpression
-          pure ()
+body = do title
+          content
+
+title :: DomBuilder t m => m ()
+title = divClass "title" $ text "Haskell Reflex Calculator Example"
+
+content :: MonadWidget t m => m ()
+content = divClass "content" $ do
+              introduction
+              parseResult <- expressionInput
+              maybeExpression <- holdDyn Nothing $ removeInvalidExpressions parseResult
+              dyn $ maybeEvaluateExpression <$> maybeExpression
+              pure ()
     where
         maybeEvaluateExpression = maybe
-            help
+            usage
             evaluateExpression
         removeInvalidExpressions = fmapMaybe
             (maybeEither
@@ -54,19 +63,20 @@ body = do introduction
 
 introduction :: DomBuilder t m => m ()
 introduction = div $ p $ do
-        text "A " >> strong (text "calculator") >> text " implemented in "
-        linkHaskell (text "Haskell") >> text ", "
-        linkGhcjs   (text "GHCJS"  ) >> text ", and "
-        linkReflex  (text "Reflex" ) >> text ". ("
-        strong $ linkSource $ text "View source code" >> text ")"
+        text "A calculator implemented in "
+        linkHaskell (text "Haskell"    ) >> text ", "
+        linkGhcjs   (text "GHCJS"      ) >> text ", and "
+        linkReflex  (text "Reflex"     ) >> text ". ["
+        linkSource  (text "source code") >> text "]"
     where
         linkHaskell = a "https://www.haskell.org/"
         linkGhcjs   = a "https://github.com/ghcjs/ghcjs"
         linkReflex  = a "https://github.com/reflex-frp/reflex-platform"
         linkSource  = a "https://github.com/jonathanknowles/haskell-calculator"
 
-help :: DomBuilder t m => m ()
-help = divClass "help" $ p $ do
+usage :: DomBuilder t m => m ()
+usage = divClass "usage" $ p $ do
+    divClass "heading" $ text "Usage"
     text "This calculator supports:"
     ul $ do li $ text "addition, subtraction, multiplication and division"
             li $ text "natural numbers"
@@ -74,7 +84,7 @@ help = divClass "help" $ p $ do
 
 expressionInput :: MonadWidget t m => m (Dynamic t (Maybe (Either Text UExp)))
 expressionInput = do
-        divClass "heading" $ text "Enter an arithmetic expression:"
+        divClass "heading" $ text "Enter an arithmetic expression"
         rec t <- div $ textInput $ def & textInputConfig_initialValue .~ T.empty
                                        & textInputConfig_attributes   .~ c
             let c = resultClass <$> r
@@ -92,9 +102,9 @@ expressionInput = do
 evaluateExpression :: MonadWidget t m => UExp -> m ()
 evaluateExpression e =
     divClass "result" $ do
-        divClass "heading" $ text "Result:"
+        divClass "heading" $ text "Result"
         divClass "value"   $ text $ pretty $ eval e
-        divClass "heading" $ text "Visualization:"
+        divClass "heading" $ text "Visualization"
         divClass "graphic" $ renderExpression e
 
 renderExpression :: MonadWidget t m => UExp -> m ()
@@ -143,7 +153,7 @@ p      = el "p"
 strong = el "strong"
 
 -------------------------------------------------------------------------------
--- Helpers
+-- usageers
 -------------------------------------------------------------------------------
 
 maybeEither :: c -> (a -> c) -> (b -> c) -> Maybe (Either a b) -> c
