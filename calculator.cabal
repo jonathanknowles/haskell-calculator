@@ -46,7 +46,7 @@ executable calculator-gui
 
 test-suite test
     hs-source-dirs:     source/test
-    main-is:            Test.hs
+    main-is:            Main.hs
     build-depends:      calculator
     default-language:   Haskell2010
     type:               exitcode-stdio-1.0
