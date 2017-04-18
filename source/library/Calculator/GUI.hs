@@ -5,7 +5,7 @@
 {-# LANGUAGE OverloadedStrings         #-}
 {-# LANGUAGE RecursiveDo               #-}
 
-module Calculator.WebInterface where
+module Calculator.GUI where
 
 import Calculator.Evaluation
 import Calculator.Parsing

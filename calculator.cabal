@@ -14,6 +14,7 @@ library
     hs-source-dirs:     source/library
     exposed-modules:    Calculator.CommandLineInterface,
                         Calculator.Evaluation,
+                        Calculator.GUI,
                         Calculator.Parsing,
                         Calculator.Pretty,
                         Calculator.Printing,
@@ -21,7 +22,6 @@ library
                         Calculator.Tokens,
                         Calculator.Types,
                         Calculator.Value,
-                        Calculator.WebInterface,
                         Reflex.Dom.Extras
     build-depends:      attoparsec      >= 0.13.0.1 && < 1,
                         base            >= 4.7      && < 5,

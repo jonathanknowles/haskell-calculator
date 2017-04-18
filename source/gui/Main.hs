@@ -1,5 +1,5 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 
-import qualified Calculator.WebInterface as W
+import qualified Calculator.GUI as G
 
-main = W.main
+main = G.main
