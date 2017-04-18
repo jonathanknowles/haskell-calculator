@@ -38,9 +38,9 @@ executable calculator-cli
     build-depends:      calculator
     default-language:   Haskell2010
 
-executable web
-    hs-source-dirs:     source/web
-    main-is:            Calculator.hs
+executable calculator-gui
+    hs-source-dirs:     source/gui
+    main-is:            Main.hs
     build-depends:      calculator
     default-language:   Haskell2010
 
