@@ -17,7 +17,7 @@ The implementation includes:
 * Functions for parsing arithmetic expressions from textual input (see <code>[Calculator.Parsing](https://github.com/jonathanknowles/haskell-calculator/blob/master/source/library/Calculator/Parsing.hs)</code>)
 * Functions for pretty-printing arithmetic expressions (see <code>[Calculator.Printing](https://github.com/jonathanknowles/haskell-calculator/blob/master/source/library/Calculator/Printing.hs)</code>)
 * Functions for evaluating arithmetic expressions (see <code>[Calculator.Evaluation](https://github.com/jonathanknowles/haskell-calculator/blob/master/source/library/Calculator/Evaluation.hs)</code>)
-* A simple command-line interface (see <code>[Calculator.CommandLineInterface](https://github.com/jonathanknowles/haskell-calculator/blob/master/source/library/Calculator/CommandLineInterface.hs)</code>)
+* A simple command-line interface (see <code>[Calculator.CLI](https://github.com/jonathanknowles/haskell-calculator/blob/master/source/library/Calculator/CLI.hs)</code>)
 * A simple graphical user interface (see <code>[Calculator.GUI](https://github.com/jonathanknowles/haskell-calculator/blob/master/source/library/Calculator/GUI.hs)</code>)
 
 The implementation also includes:

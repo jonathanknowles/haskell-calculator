@@ -1,5 +1,5 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 
-import qualified Calculator.CommandLineInterface as C
+import qualified Calculator.CLI as C
 
 main = C.main

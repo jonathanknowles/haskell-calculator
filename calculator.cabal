@@ -12,7 +12,7 @@ cabal-version:  >= 1.10
 
 library
     hs-source-dirs:     source/library
-    exposed-modules:    Calculator.CommandLineInterface,
+    exposed-modules:    Calculator.CLI,
                         Calculator.Evaluation,
                         Calculator.GUI,
                         Calculator.Parsing,
