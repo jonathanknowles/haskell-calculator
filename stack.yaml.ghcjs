@@ -1,8 +1,9 @@
+compiler: ghcjs-0.2.1.9007015_ghc-8.0.1
+compiler-check: match-exact
 extra-deps:
   - ghcjs-dom-0.2.4.0
   - prim-uniq-0.1.0.1
   - ref-tf-0.4.0.1
-  - webkitgtk3-javascriptcore-0.13.2.0
   - zenc-0.1.1
 packages:
   - '.'
@@ -15,4 +16,10 @@ packages:
         git: git@github.com:/reflex-frp/reflex-dom
         commit: 66b6d35773fcb337ab38ebce02c4b23baeae721e
 resolver: lts-7.15
+setup-info:
+    ghcjs:
+        source:
+            ghcjs-0.2.1.9007015_ghc-8.0.1:
+                url: http://ghcjs.tolysz.org/ghc-8.0-2017-01-11-lts-7.15-9007015.tar.gz
+                sha1: 30d34e9d704bdb799066387dfa1ba98b8884d932
 
