@@ -33,7 +33,7 @@ main :: IO ()
 main = mainWidgetWithHead head body
 
 head :: DomBuilder t m => m ()
-head = do styleSheet "https://fonts.googleapis.com/css?family=Noto"
+head = do styleSheet "https://fonts.googleapis.com/css?family=Noto Sans"
           styleSheet "https://fonts.googleapis.com/css?family=Roboto"
           styleSheet "style.css"
 
