@@ -44,8 +44,10 @@ On Debian-based systems, first install the following dependencies:
 
 Then issue the following commands:
 
-<code>stack setup</code>
-<code>stack build</code>
+```
+stack setup
+stack build
+````
 
 ### Running the command line interface
 
