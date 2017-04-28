@@ -31,6 +31,30 @@ Also included:
 
 This project supports both GHC and GHCJS.
 
+The dependencies for GHC and GHCJS are slightly different.
+
+### Building with GHC
+
+On Debian-based systems, first install the following dependencies:
+
+* <code>libcairo-dev</code>
+* <code>libghc-pango-dev</code>
+* <code>libghc-gtk3-dev</code>
+* <code>libwebkitgtk-3.0-dev</code>
+
+Then issue the following commands:
+
+<code>stack setup</code>
+<code>stack build</code>
+
+### Running the command line interface
+
+The command line interface is built with GHC.
+
+To run it, issue the following command:
+
+<code>stack exec calculator-cli</code>
+
 ### Building the web-based graphical user interface
 
 The web interface is built with GHCJS.
@@ -48,14 +72,6 @@ Open the following file with your web browser to view the graphical user interfa
 ```
 
 Copy and paste the final line into your web browser to view the user interface.
-
-### Running the command line interface
-
-The command line interface is built with GHC.
-
-To run it, issue the following command:
-
-<code>stack exec calculator-cli</code>
 
 ### Running the test suite
 
