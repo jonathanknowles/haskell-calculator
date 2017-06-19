@@ -89,7 +89,8 @@ expressionInput = do
                                        & textInputConfig_attributes   .~ c
             let c = resultClass <$> r
                 r = maybeParse <$> _textInput_value t
-            divClass "feedback" $ dyn $ feedback <$> r
+                s = parseExpression <$> _textInput_value t
+            divClass "feedback" $ dyn $ feedback <$> s
         return r
     where
         maybeParse x = if T.null x then Nothing
@@ -99,7 +100,10 @@ expressionInput = do
                     ExpressionParseSuccess e -> Right e
                     ExpressionParseFailure e -> Left $ pretty e
 
-        feedback = text . maybeEither hardSpace id (const hardSpace)
+        feedback = text . \case
+            ExpressionParseSuccess e -> hardSpace
+            ExpressionParseFailure e -> pretty e
+
         resultClass = ("class" =:) . maybeEither "empty"
                                           (const "error")
                                           (const "valid")
