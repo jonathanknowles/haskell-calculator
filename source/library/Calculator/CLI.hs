@@ -30,5 +30,5 @@ calculate :: Text -> Text
 calculate e =
     case parseExpression e of
         ExpressionParseFailure e -> pretty e
-        ExpressionParseSuccess r -> pretty r <> textEqu <> pretty (eval r)
+        ExpressionParseSuccess r -> pretty r <> " " <> textEqu <> " " <> pretty (eval r)
 

@@ -1,5 +1,6 @@
-{-# LANGUAGE GADTs      #-}
-{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE GADTs             #-}
+{-# LANGUAGE LambdaCase        #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module Calculator.Printing where
 
@@ -20,8 +21,8 @@ instance Pretty (Exp a) where
         Val a -> pretty a
         Neg a -> textNeg <> pretty a
         Bra a -> textBra <> pretty a <> textKet
-        Add a b -> pretty a <> textAdd <> pretty b
-        Sub a b -> pretty a <> textSub <> pretty b
-        Mul a b -> pretty a <> textMul <> pretty b
-        Div a b -> pretty a <> textDiv <> pretty b
+        Add a b -> pretty a <> " " <> textAdd <> " " <> pretty b
+        Sub a b -> pretty a <> " " <> textSub <> " " <> pretty b
+        Mul a b -> pretty a <> " " <> textMul <> " " <> pretty b
+        Div a b -> pretty a <> " " <> textDiv <> " " <> pretty b
 
