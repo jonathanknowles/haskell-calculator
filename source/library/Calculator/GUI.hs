@@ -77,21 +77,23 @@ content = divClass "content" $ do
 expressionInput :: MonadWidget t m => m (Dynamic t ExpressionParseResult)
 expressionInput = do
         divClass "heading" $ text "Enter an arithmetic expression"
-        rec t <- div $ textInput $ def & textInputConfig_initialValue .~ T.empty
-                                       & textInputConfig_attributes   .~ c
-            let c = resultClass <$> r
-                r = parseExpression <$> _textInput_value t
-            divClass "feedback" $ dyn $ feedback <$> r
-        return r
+        rec t <- div $ textInput $ def
+                     & textInputConfig_initialValue .~ T.empty
+                     & textInputConfig_attributes   .~ attributes
+            let attributes = (autofocus <>) . resultClass <$> parseResult
+            let parseResult = parseExpression <$> _textInput_value t
+            divClass "feedback" $ dyn $ feedback <$> parseResult
+        return parseResult
     where
-        feedback = text . \case
-            ExpressionParseSuccess _               -> hardSpace
-            ExpressionParseFailure ExpressionEmpty -> hardSpace
-            ExpressionParseFailure e               -> pretty e
+        autofocus = "autofocus" =: T.empty
         resultClass = ("class" =:) . \case
             ExpressionParseSuccess _               -> "valid"
             ExpressionParseFailure ExpressionEmpty -> "empty"
             ExpressionParseFailure _               -> "error"
+        feedback = text . \case
+            ExpressionParseSuccess _               -> hardSpace
+            ExpressionParseFailure ExpressionEmpty -> hardSpace
+            ExpressionParseFailure e               -> pretty e
 
 evaluateExpression :: MonadWidget t m => UExp -> m ()
 evaluateExpression e =
