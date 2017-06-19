@@ -52,14 +52,10 @@ content = divClass "content" $ do
               dyn $ maybeEvaluateExpression <$> maybeExpression
               pure ()
     where
-        maybeEvaluateExpression = maybe
-            usage
-            evaluateExpression
-        removeInvalidExpressions = fmapMaybe
-            (maybeEither
-                (Just Nothing)
-                (const Nothing)
-                (Just . Just)) . updated
+        maybeEvaluateExpression = maybe usage evaluateExpression
+        removeInvalidExpressions = fmap f . updated
+            where f = \case ExpressionParseSuccess e -> Just e
+                            ExpressionParseFailure _ -> Nothing
 
 introduction :: DomBuilder t m => m ()
 introduction = div $ p $ do
@@ -82,28 +78,19 @@ usage = divClass "usage" $ p $ do
             li $ text "natural numbers"
             li $ text "parentheses"
 
-expressionInput :: MonadWidget t m => m (Dynamic t (Maybe (Either Text UExp)))
+expressionInput :: MonadWidget t m => m (Dynamic t ExpressionParseResult)
 expressionInput = do
         divClass "heading" $ text "Enter an arithmetic expression"
         rec t <- div $ textInput $ def & textInputConfig_initialValue .~ T.empty
                                        & textInputConfig_attributes   .~ c
-            let c = resultClass <$> s
-                r = maybeParse <$> _textInput_value t
-                s = parseExpression <$> _textInput_value t
-            divClass "feedback" $ dyn $ feedback <$> s
+            let c = resultClass <$> r
+                r = parseExpression <$> _textInput_value t
+            divClass "feedback" $ dyn $ feedback <$> r
         return r
     where
-        maybeParse x = if T.null x then Nothing
-                                   else Just $ p x
-            where
-                p x = case parseExpression x of
-                    ExpressionParseSuccess e -> Right e
-                    ExpressionParseFailure e -> Left $ pretty e
-
         feedback = text . \case
             ExpressionParseSuccess e -> hardSpace
             ExpressionParseFailure e -> pretty e
-
         resultClass = ("class" =:) . \case
             ExpressionParseSuccess _               -> "valid"
             ExpressionParseFailure ExpressionEmpty -> "empty"
