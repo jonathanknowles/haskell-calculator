@@ -89,8 +89,9 @@ expressionInput = do
         return r
     where
         feedback = text . \case
-            ExpressionParseSuccess e -> hardSpace
-            ExpressionParseFailure e -> pretty e
+            ExpressionParseSuccess _               -> hardSpace
+            ExpressionParseFailure ExpressionEmpty -> hardSpace
+            ExpressionParseFailure e               -> pretty e
         resultClass = ("class" =:) . \case
             ExpressionParseSuccess _               -> "valid"
             ExpressionParseFailure ExpressionEmpty -> "empty"
