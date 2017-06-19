@@ -44,19 +44,6 @@ body = do title
 title :: DomBuilder t m => m ()
 title = divClass "title" $ text "Haskell Reflex Calculator Example"
 
-content :: MonadWidget t m => m ()
-content = divClass "content" $ do
-              introduction
-              parseResult <- expressionInput
-              maybeExpression <- holdDyn Nothing $ removeInvalidExpressions parseResult
-              dyn $ maybeEvaluateExpression <$> maybeExpression
-              pure ()
-    where
-        maybeEvaluateExpression = maybe usage evaluateExpression
-        removeInvalidExpressions = fmap f . updated
-            where f = \case ExpressionParseSuccess e -> Just e
-                            ExpressionParseFailure _ -> Nothing
-
 introduction :: DomBuilder t m => m ()
 introduction = div $ p $ do
         text "A calculator implemented in "
@@ -77,6 +64,19 @@ usage = divClass "usage" $ p $ do
     ul $ do li $ text "addition, subtraction, multiplication and division"
             li $ text "natural numbers"
             li $ text "parentheses"
+
+content :: MonadWidget t m => m ()
+content = divClass "content" $ do
+        introduction
+        expressionUpdates <- updated <$> expressionInput
+        maybeExpression <- foldDyn update Nothing expressionUpdates
+        dyn $ maybe usage evaluateExpression <$> maybeExpression
+        pure ()
+    where
+        update p m = case p of
+            ExpressionParseSuccess e               -> Just e  -- update with expression
+            ExpressionParseFailure ExpressionEmpty -> Nothing -- update with empty
+            ExpressionParseFailure _               -> m       -- no update
 
 expressionInput :: MonadWidget t m => m (Dynamic t ExpressionParseResult)
 expressionInput = do
