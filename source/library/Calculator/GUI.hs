@@ -87,7 +87,7 @@ expressionInput = do
         divClass "heading" $ text "Enter an arithmetic expression"
         rec t <- div $ textInput $ def & textInputConfig_initialValue .~ T.empty
                                        & textInputConfig_attributes   .~ c
-            let c = resultClass <$> r
+            let c = resultClass <$> s
                 r = maybeParse <$> _textInput_value t
                 s = parseExpression <$> _textInput_value t
             divClass "feedback" $ dyn $ feedback <$> s
@@ -104,9 +104,10 @@ expressionInput = do
             ExpressionParseSuccess e -> hardSpace
             ExpressionParseFailure e -> pretty e
 
-        resultClass = ("class" =:) . maybeEither "empty"
-                                          (const "error")
-                                          (const "valid")
+        resultClass = ("class" =:) . \case
+            ExpressionParseSuccess _               -> "valid"
+            ExpressionParseFailure ExpressionEmpty -> "empty"
+            ExpressionParseFailure _               -> "error"
 
 evaluateExpression :: MonadWidget t m => UExp -> m ()
 evaluateExpression e =
