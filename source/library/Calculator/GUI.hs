@@ -149,16 +149,3 @@ li     = el "li"
 p      = el "p"
 strong = el "strong"
 
--------------------------------------------------------------------------------
--- usageers
--------------------------------------------------------------------------------
-
-maybeEither :: c -> (a -> c) -> (b -> c) -> Maybe (Either a b) -> c
-maybeEither n l r = \case
-    Nothing        -> n
-    Just (Left  x) -> l x
-    Just (Right x) -> r x
-
-maybeEither' :: Maybe (Either a b) -> Maybe b
-maybeEither' = maybeEither Nothing (const Nothing) Just
-
