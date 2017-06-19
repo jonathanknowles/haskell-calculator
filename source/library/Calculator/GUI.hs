@@ -25,10 +25,6 @@ import Reflex.Dom.Extras
 
 import qualified Data.Text as T
 
--------------------------------------------------------------------------------
--- Page structure
--------------------------------------------------------------------------------
-
 main :: IO ()
 main = mainWidgetWithHead head body
 
@@ -121,10 +117,6 @@ renderExpression = \case
                 td $ text o
                 td $ renderExpression b
 
--------------------------------------------------------------------------------
--- Symbols
--------------------------------------------------------------------------------
-
 hardSpace = "　"
 symbolAdd = "+"
 symbolSub = "−"
@@ -133,20 +125,4 @@ symbolDiv = "÷"
 symbolBra = "("
 symbolKet = ")"
 symbolNeg = symbolSub
-
--------------------------------------------------------------------------------
--- DOM builders
--------------------------------------------------------------------------------
-
-tableClass c = elAttr "table" ("class" =: c)
-
-a href = elAttr "a" ("href" =: href)
-
-div    = el "div"
-tr     = el "tr"
-td     = el "td"
-ul     = el "ul"
-li     = el "li"
-p      = el "p"
-strong = el "strong"
 
