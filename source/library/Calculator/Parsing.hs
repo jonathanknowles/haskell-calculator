@@ -21,6 +21,7 @@ data ExpressionParseResult = ExpressionParseSuccess UExp
                            | ExpressionParseFailure ExpressionParseError
 
 data ExpressionParseError = ExpressionEmpty
+                          | ExpressionHasDecimalPoint
                           | ExpressionHasInvalidSyntax
                           | ExpressionHasUnmatchedBrackets
 
@@ -29,11 +30,13 @@ instance Pretty ExpressionParseError where
         ExpressionEmpty                -> "Expression is empty"
         ExpressionHasInvalidSyntax     -> "Expression contains invalid syntax"
         ExpressionHasUnmatchedBrackets -> "Expression contains unmatched brackets"
+        ExpressionHasDecimalPoint      -> "Expression contains decimal point (currently not supported)"
 
 parseExpression :: Text -> ExpressionParseResult
 parseExpression t
     | T.null            u = ExpressionParseFailure ExpressionEmpty
     | bracketsUnmatched u = ExpressionParseFailure ExpressionHasUnmatchedBrackets
+    | hasDecimalPoint   u = ExpressionParseFailure ExpressionHasDecimalPoint
     | otherwise = either (const $ ExpressionParseFailure ExpressionHasInvalidSyntax)
                          (ExpressionParseSuccess)
                          (parseOnly expressionParser u)
@@ -71,4 +74,7 @@ bracketsMatched t = T.foldl f 0 t == 0
                 | c == '('  = a + 1
                 | c == ')'  = a - 1
                 | otherwise = a
+
+hasDecimalPoint :: Text -> Bool
+hasDecimalPoint = T.any (== '.')
 
