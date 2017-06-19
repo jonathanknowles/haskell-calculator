@@ -28,10 +28,7 @@ main = do
     expression tree, and then pretty prints the result. -}
 calculate :: Text -> Text
 calculate e =
-    case parseUExp $ stripSpaces e of
-        Left e -> "Syntax error! Please try again."
-        Right r -> pretty r <> textEqu <> pretty (eval r)
-
-stripSpaces :: Text -> Text
-stripSpaces = T.filter (/= ' ')
+    case parseExpression e of
+        ExpressionParseFailure e -> pretty e
+        ExpressionParseSuccess r -> pretty r <> textEqu <> pretty (eval r)
 

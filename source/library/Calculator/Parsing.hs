@@ -1,38 +1,47 @@
 {-# LANGUAGE BangPatterns              #-}
+{-# LANGUAGE LambdaCase                #-}
 {-# LANGUAGE NoMonomorphismRestriction #-}
 {-# LANGUAGE OverloadedStrings         #-}
 
 module Calculator.Parsing where
 
+import Calculator.Pretty
 import Calculator.Tokens
 import Calculator.Types
 import Control.Applicative ((<$>), (<*>), (<|>))
 import Data.Attoparsec.Text
+import Data.Char (isSpace)
 import Data.Text (Text)
 
 import Prelude hiding (exp)
 
 import qualified Data.Text as T
 
-errorBrackets = "expression contains unmatched brackets"
-errorSyntax   = "expression contains syntax error"
+data ExpressionParseResult = ExpressionParseSuccess UExp
+                           | ExpressionParseFailure ExpressionParseError
 
-parseUExp :: Text -> Either Text UExp
-parseUExp e =
-    if not (bracketsMatch e)
-        then Left errorBrackets
-        else either (const $ Left errorSyntax) Right (parseOnly uExp e)
+data ExpressionParseError = ExpressionEmpty
+                          | ExpressionHasInvalidSyntax
+                          | ExpressionHasUnmatchedBrackets
 
-bracketsMatch :: Text -> Bool
-bracketsMatch t = T.foldl f 0 t == 0
+instance Pretty ExpressionParseError where
+    pretty = \case
+        ExpressionEmpty                -> "Expression is empty"
+        ExpressionHasInvalidSyntax     -> "Expression contains invalid syntax"
+        ExpressionHasUnmatchedBrackets -> "Expression contains unmatched brackets"
+
+parseExpression :: Text -> ExpressionParseResult
+parseExpression t
+    | T.null            u = ExpressionParseFailure ExpressionEmpty
+    | bracketsUnmatched u = ExpressionParseFailure ExpressionHasUnmatchedBrackets
+    | otherwise = either (const $ ExpressionParseFailure ExpressionHasInvalidSyntax)
+                         (ExpressionParseSuccess)
+                         (parseOnly expressionParser u)
     where
-        f !a !c | a < 0     = a
-                | c == '('  = a + 1
-                | c == ')'  = a - 1
-                | otherwise = a
+        u = stripSpaces t
 
-uExp :: Parser UExp
-uExp = choice [x <* endOfInput | x <- [bra, add, mul, neg, val]]
+expressionParser :: Parser UExp
+expressionParser = choice [x <* endOfInput | x <- [bra, add, mul, neg, val]]
     where
         val = UVal . fromInteger <$> (ss *> decimal <* ss)
         neg = UNeg <$> (ss *> choice [char charNeg *> x | x <- [bra, val]])
@@ -48,4 +57,18 @@ chainL l o r = apply <$> l <*> o <*> r >>= rest
     where
         rest l = (apply l <$> o <*> r >>= rest) <|> return l
         apply l o r = l `o` r
+
+stripSpaces :: Text -> Text
+stripSpaces = T.filter (/= ' ')
+
+bracketsUnmatched :: Text -> Bool
+bracketsUnmatched = not . bracketsMatched
+
+bracketsMatched :: Text -> Bool
+bracketsMatched t = T.foldl f 0 t == 0
+    where
+        f !a !c | a < 0     = a
+                | c == '('  = a + 1
+                | c == ')'  = a - 1
+                | otherwise = a
 

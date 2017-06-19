@@ -28,9 +28,9 @@ main = do
 -}
 propPrintParseIdentity :: UExp -> Bool
 propPrintParseIdentity e =
-    case parseUExp (pretty e) of
-        Left e -> False
-        Right r -> e == r
+    case parseExpression (pretty e) of
+        ExpressionParseFailure e -> False
+        ExpressionParseSuccess r -> e == r
 
 {-| Pretty-printing an expression tree should never produce a text
     where two or more operators appear in consecutive character

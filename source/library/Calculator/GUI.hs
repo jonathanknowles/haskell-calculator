@@ -93,7 +93,12 @@ expressionInput = do
         return r
     where
         maybeParse x = if T.null x then Nothing
-                                   else Just $ parseUExp x
+                                   else Just $ p x
+            where
+                p x = case parseExpression x of
+                    ExpressionParseSuccess e -> Right e
+                    ExpressionParseFailure e -> Left $ pretty e
+
         feedback = text . maybeEither hardSpace id (const hardSpace)
         resultClass = ("class" =:) . maybeEither "empty"
                                           (const "error")
