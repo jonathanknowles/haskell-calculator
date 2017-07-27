@@ -14,5 +14,5 @@ packages:
     location:
         git: git@github.com:/reflex-frp/reflex-dom
         commit: 66b6d35773fcb337ab38ebce02c4b23baeae721e
-resolver: lts-7.15
+resolver: lts-7.19
 
