@@ -61,7 +61,7 @@ To run it, issue the following command:
 
 The web interface is built with GHCJS.
 
-First ensure that you have a recent version of [NodeJS](https://nodejs.org/) installed. (Versions 6.6.0 and 6.7.0 should both work.)
+First ensure that you have a recent version of [NodeJS](https://nodejs.org/) installed. (Version 6.6.0 or later should work.)
 
 Then run:
 
